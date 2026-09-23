@@ -30,7 +30,7 @@
       align-items: center;
       text-align: center;
       padding: 20px;
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('landing-bg.jpg') center/cover no-repeat;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('landing-bg.jpg') center/cover no-repeat;
       background-color: #171522;
       transition: opacity 0.5s ease, visibility 0.5s ease;
     }
@@ -73,11 +73,11 @@
       z-index: 90;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       text-align: center;
-      padding: 25px 20px;
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)), url('passcode-bg.jpg') center/cover no-repeat;
+      padding: 60px 20px 20px;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('passcode-bg.jpg') center/cover no-repeat;
       background-color: #211a28;
       opacity: 0;
       visibility: hidden;
@@ -90,13 +90,14 @@
     }
 
     .lock-card {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(20px);
       border-radius: 25px;
-      padding: 30px 22px;
+      padding: 28px 22px;
       width: 100%;
       max-width: 360px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
     }
 
     .lock-card h2 {
@@ -107,25 +108,25 @@
     .lock-card p {
       font-size: 14px;
       color: #d1c5db;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .code-input-container {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
       align-items: center;
     }
 
     .code-input {
       width: 100%;
       padding: 14px;
-      font-size: 20px;
+      font-size: 22px;
       text-align: center;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       border-radius: 15px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       color: #fff;
       outline: none;
       transition: border-color 0.3s;
@@ -133,6 +134,14 @@
 
     .code-input:focus {
       border-color: #d29bc8;
+    }
+
+    .permanent-hint {
+      font-size: 13px;
+      color: #e2d9eb;
+      margin-top: 2px;
+      opacity: 0.9;
+      line-height: 1.3;
     }
 
     .unlock-btn {
@@ -145,15 +154,15 @@
       background: #d29bc8;
       color: #211a28;
       cursor: pointer;
+      margin-top: 5px;
       transition: background 0.3s;
     }
 
-    /* Hint & Banter Box */
     .hint-box {
-      margin-top: 18px;
+      margin-top: 15px;
       padding: 12px 15px;
-      background: rgba(230, 80, 110, 0.2);
-      border: 1px solid rgba(230, 80, 110, 0.4);
+      background: rgba(230, 80, 110, 0.35);
+      border: 1px solid rgba(230, 80, 110, 0.5);
       border-radius: 12px;
       color: #ffb3c1;
       font-size: 13px;
@@ -171,7 +180,7 @@
     /* 3. Main Player Interface */
     .app-wrapper {
       min-height: 100vh;
-      background: linear-gradient(160deg, rgba(23, 21, 34, 0.85), rgba(48, 38, 61, 0.9)), url('player-bg.jpg') center/cover no-repeat;
+      background: url('player-bg.jpg') center/cover no-repeat fixed;
       background-color: #171522;
       display: flex;
       justify-content: center;
@@ -186,25 +195,34 @@
 
     .header {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 22px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 12px 18px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .header h1 {
-      font-size: 30px;
-      margin-bottom: 7px;
+      font-size: 28px;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
     }
 
     .header p {
-      color: #c7bdcf;
+      color: #e2d9eb;
       font-size: 14px;
+      text-shadow: 0 1px 5px rgba(0,0,0,0.6);
     }
 
     .player {
-      background: rgba(255,255,255,0.08);
+      background: rgba(0, 0, 0, 0.45);
       border-radius: 25px;
       padding: 22px;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
       margin-bottom: 22px;
     }
 
@@ -215,6 +233,7 @@
       margin-bottom: 20px;
       overflow: hidden;
       background: linear-gradient(135deg, #8e6bb3, #d69bb8);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .cover {
@@ -232,10 +251,11 @@
     .song-info h2 {
       font-size: 21px;
       margin-bottom: 5px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
 
     .song-info p {
-      color: #c7bdcf;
+      color: #d8ceea;
       font-size: 14px;
     }
 
@@ -248,7 +268,7 @@
     .time {
       display: flex;
       justify-content: space-between;
-      color: #bdb3c5;
+      color: #d1c5db;
       font-size: 12px;
       margin-top: 5px;
     }
@@ -264,12 +284,18 @@
     .controls button {
       border: none;
       color: white;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.2);
       width: 48px;
       height: 48px;
       border-radius: 50%;
       font-size: 19px;
       cursor: pointer;
+      backdrop-filter: blur(5px);
+      transition: background 0.2s;
+    }
+
+    .controls button:hover {
+      background: rgba(255,255,255,0.3);
     }
 
     .controls .play {
@@ -281,14 +307,35 @@
     }
 
     .songs {
-      background: rgba(255,255,255,0.06);
+      background: rgba(0, 0, 0, 0.45);
       border-radius: 22px;
       padding: 15px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     .songs h3 {
       margin: 5px 8px 14px;
       font-size: 18px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    /* Scrollable Playlist Container */
+    .song-list-container {
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .song-list-container::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .song-list-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
     }
 
     .song {
@@ -298,16 +345,17 @@
       padding: 13px 10px;
       border-radius: 15px;
       cursor: pointer;
+      transition: background 0.2s;
     }
 
     .song:hover {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.15);
     }
 
     .song-number {
       width: 30px;
       text-align: center;
-      color: #bdb3c5;
+      color: #d1c5db;
     }
 
     .song-details {
@@ -318,10 +366,11 @@
       display: block;
       font-size: 15px;
       margin-bottom: 4px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
 
     .song-details span {
-      color: #aaa0b3;
+      color: #c4b8d2;
       font-size: 12px;
     }
 
@@ -330,7 +379,7 @@
     }
 
     .volume label {
-      color: #bdb3c5;
+      color: #d1c5db;
       font-size: 12px;
     }
 
@@ -361,8 +410,8 @@
 
   <!-- 1. Landing Interface -->
   <div id="landingScreen">
-    <h1>Our Special Place ♡</h1>
-    <p>A little album of music and memories created just for you.</p>
+    <h1>a special gift♡</h1>
+    <p>A little album of music and memories created just for you my cutiee jagu.</p>
     <button class="enter-btn" onclick="goToPasscode()">Enter into precious album</button>
   </div>
 
@@ -373,7 +422,10 @@
       <p>Enter the secret code to unlock our playlist!</p>
 
       <div class="code-input-container">
-        <input type="password" id="passcodeInput" class="code-input" placeholder="••••" maxlength="10">
+        <input type="password" id="passcodeInput" class="code-input" placeholder="••••••" maxlength="6">
+        
+        <p class="permanent-hint">💡 Hint: The code consists of 6 numbers.</p>
+
         <button class="unlock-btn" onclick="checkPasscode()">Unlock Album ♡</button>
       </div>
 
@@ -424,27 +476,109 @@
       <div class="songs">
         <h3>Our Songs</h3>
 
-        <div class="song" onclick="selectSong(0)">
-          <div class="song-number">01</div>
-          <div class="song-details">
-            <strong>Our First Song</strong>
-            <span>Tap to play</span>
+        <div class="song-list-container">
+          <div class="song" onclick="selectSong(0)">
+            <div class="song-number">01</div>
+            <div class="song-details">
+              <strong>Our First Song</strong>
+              <span>Tap to play</span>
+            </div>
           </div>
-        </div>
 
-        <div class="song" onclick="selectSong(1)">
-          <div class="song-number">02</div>
-          <div class="song-details">
-            <strong>Our Second Song</strong>
-            <span>Tap to play</span>
+          <div class="song" onclick="selectSong(1)">
+            <div class="song-number">02</div>
+            <div class="song-details">
+              <strong>Our Second Song</strong>
+              <span>Tap to play</span>
+            </div>
           </div>
-        </div>
 
-        <div class="song" onclick="selectSong(2)">
-          <div class="song-number">03</div>
-          <div class="song-details">
-            <strong>Our Third Song</strong>
-            <span>Tap to play</span>
+          <div class="song" onclick="selectSong(2)">
+            <div class="song-number">03</div>
+            <div class="song-details">
+              <strong>Our Third Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(3)">
+            <div class="song-number">04</div>
+            <div class="song-details">
+              <strong>Our Fourth Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(4)">
+            <div class="song-number">05</div>
+            <div class="song-details">
+              <strong>Our Fifth Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(5)">
+            <div class="song-number">06</div>
+            <div class="song-details">
+              <strong>Our Sixth Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(6)">
+            <div class="song-number">07</div>
+            <div class="song-details">
+              <strong>Our Seventh Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(7)">
+            <div class="song-number">08</div>
+            <div class="song-details">
+              <strong>Our Eighth Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(8)">
+            <div class="song-number">09</div>
+            <div class="song-details">
+              <strong>Our Ninth Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(9)">
+            <div class="song-number">10</div>
+            <div class="song-details">
+              <strong>Our Tenth Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(10)">
+            <div class="song-number">11</div>
+            <div class="song-details">
+              <strong>Our Eleventh Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(11)">
+            <div class="song-number">12</div>
+            <div class="song-details">
+              <strong>Our Twelfth Song</strong>
+              <span>Tap to play</span>
+            </div>
+          </div>
+
+          <div class="song" onclick="selectSong(12)">
+            <div class="song-number">13</div>
+            <div class="song-details">
+              <strong>Our Thirteenth Song</strong>
+              <span>Tap to play</span>
+            </div>
           </div>
         </div>
 
@@ -457,34 +591,29 @@
 
   <script>
     // -------------------------------------------------------------
-    // CUSTOMIZE YOUR SECRET CODE & HINTS HERE:
+    // CUSTOMIZE YOUR 6-DIGIT SECRET CODE & HINTS HERE:
     // -------------------------------------------------------------
-    const SECRET_CODE = "281225"; // Set your secret code here (e.g. date, nickname, anniversary)
-    const HINT_1 = "😜 Wrong code! Hint #1: Think about the day we first met / our special date!";
-    const HINT_2 = "🙄 Really? How could you forget?! Hint #2: It's 281225! (Don't make me sad!)";
+    const SECRET_CODE = "281225"; // Set your 6-digit passcode here
+    const HINT_1 = "😜 Wrong code! Think of our special day the day we met!";
+    const HINT_2 = "🙄 Still wrong?! Hint: It's 181225! (Don't forget it!)";
     // -------------------------------------------------------------
 
     let wrongAttempts = 0;
 
     const songs = [
-      {
-        title: "Our First Song",
-        artist: "Our Playlist",
-        file: "song1.mp3",
-        cover: "cover1.jpg"
-      },
-      {
-        title: "Our Second Song",
-        artist: "Our Playlist",
-        file: "song2.mp3",
-        cover: "cover2.jpg"
-      },
-      {
-        title: "Our Third Song",
-        artist: "Our Playlist",
-        file: "song3.mp3",
-        cover: "cover3.jpg"
-      }
+      { title: "Our First Song", artist: "Our Playlist", file: "song1.mp3", cover: "cover1.jpg" },
+      { title: "Our Second Song", artist: "Our Playlist", file: "song2.mp3", cover: "cover2.jpg" },
+      { title: "Our Third Song", artist: "Our Playlist", file: "song3.mp3", cover: "cover3.jpg" },
+      { title: "Our Fourth Song", artist: "Our Playlist", file: "song4.mp3", cover: "cover4.jpg" },
+      { title: "Our Fifth Song", artist: "Our Playlist", file: "song5.mp3", cover: "cover5.jpg" },
+      { title: "Our Sixth Song", artist: "Our Playlist", file: "song6.mp3", cover: "cover6.jpg" },
+      { title: "Our Seventh Song", artist: "Our Playlist", file: "song7.mp3", cover: "cover7.jpg" },
+      { title: "Our Eighth Song", artist: "Our Playlist", file: "song8.mp3", cover: "cover8.jpg" },
+      { title: "Our Ninth Song", artist: "Our Playlist", file: "song9.mp3", cover: "cover9.jpg" },
+      { title: "Our Tenth Song", artist: "Our Playlist", file: "song10.mp3", cover: "cover10.jpg" },
+      { title: "Our Eleventh Song", artist: "Our Playlist", file: "song11.mp3", cover: "cover11.jpg" },
+      { title: "Our Twelfth Song", artist: "Our Playlist", file: "song12.mp3", cover: "cover12.jpg" },
+      { title: "Our Thirteenth Song", artist: "Our Playlist", file: "song13.mp3", cover: "cover13.jpg" }
     ];
 
     let currentSong = 0;
@@ -530,18 +659,14 @@
       const enteredCode = passcodeInput.value.trim();
 
       if (enteredCode === SECRET_CODE) {
-        // Correct passcode! Hide Lock Screen and start music
         passcodeScreen.style.opacity = "0";
         passcodeScreen.style.visibility = "hidden";
 
         loadSong(0);
-        audio.play().then(() => {
-          playButton.textContent = "Ⅱ";
-        }).catch(e => console.log("Autoplay prevention:", e));
+        playButton.textContent = "▶";
 
         triggerEmojiBurst();
       } else {
-        // Incorrect passcode
         wrongAttempts++;
         hintBox.style.display = "block";
 
@@ -551,14 +676,12 @@
           hintBox.textContent = HINT_2;
         }
 
-        // Restart shake animation
         hintBox.style.animation = 'none';
-        hintBox.offsetHeight; /* trigger reflow */
+        hintBox.offsetHeight;
         hintBox.style.animation = null;
       }
     }
 
-    // Allow pressing "Enter" key on keyboard
     passcodeInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         checkPasscode();
@@ -623,34 +746,4 @@
       currentTime.textContent = formatTime(audio.currentTime);
     });
 
-    audio.addEventListener("loadedmetadata", () => {
-      duration.textContent = formatTime(audio.duration);
-    });
-
-    progress.addEventListener("input", () => {
-      if (audio.duration) {
-        audio.currentTime = (progress.value / 100) * audio.duration;
-      }
-    });
-
-    volume.addEventListener("input", () => {
-      audio.volume = volume.value;
-    });
-
-    audio.addEventListener("ended", () => {
-      nextSong();
-    });
-
-    function formatTime(seconds) {
-      if (isNaN(seconds)) return "0:00";
-      let minutes = Math.floor(seconds / 60);
-      let secs = Math.floor(seconds % 60);
-      if (secs < 10) secs = "0" + secs;
-      return minutes + ":" + secs;
-    }
-
-    loadSong(0);
-  </script>
-
-</body>
-</html>
+    audio.addEventListener("loadedmetadata",
