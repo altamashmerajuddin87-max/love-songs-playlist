@@ -19,7 +19,7 @@
       position: relative;
     }
 
-    /* Landing Screen Interface */
+    /* 1. Landing Screen Interface */
     #landingScreen {
       position: fixed;
       inset: 0;
@@ -30,10 +30,9 @@
       align-items: center;
       text-align: center;
       padding: 20px;
-      /* Background Image for Landing Screen */
       background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('landing-bg.jpg') center/cover no-repeat;
-      background-color: #171522; /* Fallback color */
-      transition: opacity 0.6s ease, visibility 0.6s ease;
+      background-color: #171522;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
 
     #landingScreen h1 {
@@ -67,12 +66,113 @@
       transform: scale(0.96);
     }
 
-    /* Main App Interface */
+    /* 2. Passcode / Lock Screen Interface */
+    #passcodeScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 25px 20px;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)), url('passcode-bg.jpg') center/cover no-repeat;
+      background-color: #211a28;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #passcodeScreen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lock-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 30px 22px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .lock-card h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .lock-card p {
+      font-size: 14px;
+      color: #d1c5db;
+      margin-bottom: 22px;
+    }
+
+    .code-input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .code-input {
+      width: 100%;
+      padding: 14px;
+      font-size: 20px;
+      text-align: center;
+      letter-spacing: 4px;
+      border-radius: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .code-input:focus {
+      border-color: #d29bc8;
+    }
+
+    .unlock-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 15px;
+      background: #d29bc8;
+      color: #211a28;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    /* Hint & Banter Box */
+    .hint-box {
+      margin-top: 18px;
+      padding: 12px 15px;
+      background: rgba(230, 80, 110, 0.2);
+      border: 1px solid rgba(230, 80, 110, 0.4);
+      border-radius: 12px;
+      color: #ffb3c1;
+      font-size: 13px;
+      line-height: 1.4;
+      display: none;
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* 3. Main Player Interface */
     .app-wrapper {
       min-height: 100vh;
-      /* Background Image for Player Screen */
       background: linear-gradient(160deg, rgba(23, 21, 34, 0.85), rgba(48, 38, 61, 0.9)), url('player-bg.jpg') center/cover no-repeat;
-      background-color: #171522; /* Fallback color */
+      background-color: #171522;
       display: flex;
       justify-content: center;
       padding: 25px 15px;
@@ -259,14 +359,29 @@
 
 <body>
 
-  <!-- Landing Interface -->
+  <!-- 1. Landing Interface -->
   <div id="landingScreen">
     <h1>Our Special Place ♡</h1>
     <p>A little album of music and memories created just for you.</p>
-    <button class="enter-btn" onclick="enterAlbum()">Enter into precious album</button>
+    <button class="enter-btn" onclick="goToPasscode()">Enter into precious album</button>
   </div>
 
-  <!-- Music Player Interface -->
+  <!-- 2. Passcode Lock Interface -->
+  <div id="passcodeScreen">
+    <div class="lock-card">
+      <h2>Secret Passcode 🔒</h2>
+      <p>Enter the secret code to unlock our playlist!</p>
+
+      <div class="code-input-container">
+        <input type="password" id="passcodeInput" class="code-input" placeholder="••••" maxlength="10">
+        <button class="unlock-btn" onclick="checkPasscode()">Unlock Album ♡</button>
+      </div>
+
+      <div id="hintBox" class="hint-box"></div>
+    </div>
+  </div>
+
+  <!-- 3. Music Player Interface -->
   <div class="app-wrapper">
     <div class="app">
 
@@ -341,15 +456,25 @@
   <audio id="audio"></audio>
 
   <script>
+    // -------------------------------------------------------------
+    // CUSTOMIZE YOUR SECRET CODE & HINTS HERE:
+    // -------------------------------------------------------------
+    const SECRET_CODE = "281225"; // Set your secret code here (e.g. date, nickname, anniversary)
+    const HINT_1 = "😜 Wrong code! Hint #1: Think about the day we first met / our special date!";
+    const HINT_2 = "🙄 Really? How could you forget?! Hint #2: It's 281225! (Don't make me sad!)";
+    // -------------------------------------------------------------
+
+    let wrongAttempts = 0;
+
     const songs = [
       {
-        title: "chaar kadam ft.altu💞",
+        title: "Our First Song",
         artist: "Our Playlist",
         file: "song1.mp3",
         cover: "cover1.jpg"
       },
       {
-        title: "dil haareya ft.altu💗",
+        title: "Our Second Song",
         artist: "Our Playlist",
         file: "song2.mp3",
         cover: "cover2.jpg"
@@ -374,6 +499,9 @@
     const duration = document.getElementById("duration");
     const coverImage = document.getElementById("coverImage");
     const landingScreen = document.getElementById("landingScreen");
+    const passcodeScreen = document.getElementById("passcodeScreen");
+    const hintBox = document.getElementById("hintBox");
+    const passcodeInput = document.getElementById("passcodeInput");
 
     const emojiList = ["💖", "✨", "🌸", "💕", "🎶", "🥰", "💌", "⭐"];
 
@@ -392,19 +520,50 @@
       }
     }
 
-    function enterAlbum() {
-      // Hide Landing Screen
+    function goToPasscode() {
       landingScreen.style.opacity = "0";
       landingScreen.style.visibility = "hidden";
-
-      // Start Playing Music Directly
-      loadSong(0);
-      audio.play().then(() => {
-        playButton.textContent = "Ⅱ";
-      }).catch(e => console.log("Autoplay prevention:", e));
-
-      triggerEmojiBurst();
+      passcodeScreen.classList.add("active");
     }
+
+    function checkPasscode() {
+      const enteredCode = passcodeInput.value.trim();
+
+      if (enteredCode === SECRET_CODE) {
+        // Correct passcode! Hide Lock Screen and start music
+        passcodeScreen.style.opacity = "0";
+        passcodeScreen.style.visibility = "hidden";
+
+        loadSong(0);
+        audio.play().then(() => {
+          playButton.textContent = "Ⅱ";
+        }).catch(e => console.log("Autoplay prevention:", e));
+
+        triggerEmojiBurst();
+      } else {
+        // Incorrect passcode
+        wrongAttempts++;
+        hintBox.style.display = "block";
+
+        if (wrongAttempts === 1) {
+          hintBox.textContent = HINT_1;
+        } else {
+          hintBox.textContent = HINT_2;
+        }
+
+        // Restart shake animation
+        hintBox.style.animation = 'none';
+        hintBox.offsetHeight; /* trigger reflow */
+        hintBox.style.animation = null;
+      }
+    }
+
+    // Allow pressing "Enter" key on keyboard
+    passcodeInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        checkPasscode();
+      }
+    });
 
     function loadSong(index) {
       currentSong = index;
@@ -478,7 +637,6 @@
       audio.volume = volume.value;
     });
 
-    // Plays continuous music automatically
     audio.addEventListener("ended", () => {
       nextSong();
     });
