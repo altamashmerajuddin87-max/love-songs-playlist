@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Our Music</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #171522, #30263d);
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 25px 15px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      font-size: 30px;
+      margin-bottom: 7px;
+    }
+
+    .header p {
+      color: #c7bdcf;
+      font-size: 14px;
+    }
+
+    .player {
+      background: rgba(255,255,255,0.08);
+      border-radius: 25px;
+      padding: 22px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      margin-bottom: 22px;
+    }
+
+    .cover {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 20px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #8e6bb3, #d69bb8);
+    }
+
+    .song-info {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .song-info h2 {
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .song-info p {
+      color: #c7bdcf;
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #d7a8d8;
+      cursor: pointer;
+    }
+
+    .time {
+      display: flex;
+      justify-content: space-between;
+      color: #bdb3c5;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .controls button {
+      border: none;
+      color: white;
+      background: rgba(255,255,255,0.1);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 19px;
+      cursor: pointer;
+    }
+
+    .controls .play {
+      width: 62px;
+      height: 62px;
+      font-size: 25px;
+      background: #d29bc8;
+      color: #211a28;
+    }
+
+    .songs {
+      background: rgba(255,255,255,0.06);
+      border-radius: 22px;
+      padding: 15px;
+    }
+
+    .songs h3 {
+      margin: 5px 8px 14px;
+      font-size: 18px;
+    }
+
+    .song {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 13px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+
+    .song:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .song-number {
+      width: 30px;
+      text-align: center;
+      color: #bdb3c5;
+    }
+
+    .song-details {
+      flex: 1;
+    }
+
+    .song-details strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .song-details span {
+      color: #aaa0b3;
+      font-size: 12px;
+    }
+
+    .volume {
+      margin-top: 18px;
+    }
+
+    .volume label {
+      color: #bdb3c5;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div class="header">
+      <h1>Our Music ♡</h1>
+      <p>A little place for our songs</p>
+    </div>
+
+    <div class="player">
+
+      <!-- Cover image -->
+      <div class="cover"></div>
+
+      <div class="song-info">
+        <h2 id="title">Our First Song</h2>
+        <p id="artist">Our Playlist</p>
+      </div>
+
+      <input type="range" id="progress" value="0" min="0" max="100">
+
+      <div class="time">
+        <span id="currentTime">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+
+      <div class="controls">
+        <button onclick="previousSong()">↶</button>
+        <button class="play" onclick="togglePlay()" id="playButton">▶</button>
+        <button onclick="nextSong()">↷</button>
+      </div>
+
+      <div class="volume">
+        <label>Volume</label>
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+      </div>
+
+    </div>
+
+    <div class="songs">
+      <h3>Our Songs</h3>
+
+      <div class="song" onclick="selectSong(0)">
+        <div class="song-number">01</div>
+        <div class="song-details">
+          <strong>Our First Song</strong>
+          <span>Tap to play</span>
+        </div>
+      </div>
+
+      <div class="song" onclick="selectSong(1)">
+        <div class="song-number">02</div>
+        <div class="song-details">
+          <strong>Our Second Song</strong>
+          <span>Tap to play</span>
+        </div>
+      </div>
+
+      <div class="song" onclick="selectSong(2)">
+        <div class="song-number">03</div>
+        <div class="song-details">
+          <strong>Our Third Song</strong>
+          <span>Tap to play</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <audio id="audio"></audio>
+
+  <script>
+
+    const songs = [
+      {
+        title: "Our First Song",
+        artist: "Our Playlist",
+        file: "song1.mp3"
+      },
+      {
+        title: "Our Second Song",
+        artist: "Our Playlist",
+        file: "song2.mp3"
+      },
+      {
+        title: "Our Third Song",
+        artist: "Our Playlist",
+        file: "song3.mp3"
+      }
+    ];
+
+    let currentSong = 0;
+
+    const audio = document.getElementById("audio");
+    const title = document.getElementById("title");
+    const artist = document.getElementById("artist");
+    const playButton = document.getElementById("playButton");
+    const progress = document.getElementById("progress");
+    const volume = document.getElementById("volume");
+    const currentTime = document.getElementById("currentTime");
+    const duration = document.getElementById("duration");
+
+    function loadSong(index) {
+      currentSong = index;
+
+      title.textContent = songs[index].title;
+      artist.textContent = songs[index].artist;
+
+      audio.src = songs[index].file;
+      progress.value = 0;
+    }
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playButton.textContent = "Ⅱ";
+      } else {
+        audio.pause();
+        playButton.textContent = "▶";
+      }
+    }
+
+    function selectSong(index) {
+      loadSong(index);
+      audio.play();
+      playButton.textContent = "Ⅱ";
+    }
+
+    function nextSong() {
+      currentSong++;
+
+      if (currentSong >= songs.length) {
+        currentSong = 0;
+      }
+
+      loadSong(currentSong);
+      audio.play();
+      playButton.textContent = "Ⅱ";
+    }
+
+    function previousSong() {
+      currentSong--;
+
+      if (currentSong < 0) {
+        currentSong = songs.length - 1;
+      }
+
+      loadSong(currentSong);
+      audio.play();
+      playButton.textContent = "Ⅱ";
+    }
+
+    audio.addEventListener("timeupdate", () => {
+
+      if (audio.duration) {
+        progress.value =
+          (audio.currentTime / audio.duration) * 100;
+      }
+
+      currentTime.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener("loadedmetadata", () => {
+      duration.textContent = formatTime(audio.duration);
+    });
+
+    progress.addEventListener("input", () => {
+
+      if (audio.duration) {
+        audio.currentTime =
+          (progress.value / 100) * audio.duration;
+      }
+
+    });
+
+    volume.addEventListener("input", () => {
+      audio.volume = volume.value;
+    });
+
+    audio.addEventListener("ended", () => {
+      nextSong();
+    });
+
+    function formatTime(seconds) {
+
+      if (isNaN(seconds)) {
+        return "0:00";
+      }
+
+      let minutes = Math.floor(seconds / 60);
+      let secs = Math.floor(seconds % 60);
+
+      if (secs < 10) {
+        secs = "0" + secs;
+      }
+
+      return minutes + ":" + secs;
+    }
+
+    loadSong(0);
+
+  </script>
+
+</body>
+</html>
