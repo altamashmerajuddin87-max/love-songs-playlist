@@ -410,8 +410,8 @@
 
   <!-- 1. Landing Interface -->
   <div id="landingScreen">
-    <h1>a special gift♡</h1>
-    <p>A little album of music and memories created just for you my cutiee jagu.</p>
+    <h1>Our Special Place ♡</h1>
+    <p>A little album of music and memories created just for you.</p>
     <button class="enter-btn" onclick="goToPasscode()">Enter into precious album</button>
   </div>
 
@@ -593,9 +593,9 @@
     // -------------------------------------------------------------
     // CUSTOMIZE YOUR 6-DIGIT SECRET CODE & HINTS HERE:
     // -------------------------------------------------------------
-    const SECRET_CODE = "281225"; // Set your 6-digit passcode here
-    const HINT_1 = "😜 Wrong code! Think of our special day the day we met!";
-    const HINT_2 = "🙄 Still wrong?! Hint: It's 181225! (Don't forget it!)";
+    const SECRET_CODE = "123456"; // Set your 6-digit passcode here
+    const HINT_1 = "😜 Wrong code! Think of our special 6-digit date!";
+    const HINT_2 = "🙄 Still wrong?! Hint: It's 123456! (Don't forget it!)";
     // -------------------------------------------------------------
 
     let wrongAttempts = 0;
@@ -746,4 +746,34 @@
       currentTime.textContent = formatTime(audio.currentTime);
     });
 
-    audio.addEventListener("loadedmetadata",
+    audio.addEventListener("loadedmetadata", () => {
+      duration.textContent = formatTime(audio.duration);
+    });
+
+    progress.addEventListener("input", () => {
+      if (audio.duration) {
+        audio.currentTime = (progress.value / 100) * audio.duration;
+      }
+    });
+
+    volume.addEventListener("input", () => {
+      audio.volume = volume.value;
+    });
+
+    audio.addEventListener("ended", () => {
+      nextSong();
+    });
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "0:00";
+      let minutes = Math.floor(seconds / 60);
+      let secs = Math.floor(seconds % 60);
+      if (secs < 10) secs = "0" + secs;
+      return minutes + ":" + secs;
+    }
+
+    loadSong(0);
+  </script>
+
+</body>
+</html>
