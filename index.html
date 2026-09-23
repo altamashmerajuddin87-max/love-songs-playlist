@@ -13,14 +13,69 @@
 
     body {
       min-height: 100vh;
-      background: linear-gradient(160deg, #171522, #30263d);
-      color: white;
       font-family: Arial, sans-serif;
+      color: white;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Landing Screen Interface */
+    #landingScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      /* Background Image for Landing Screen */
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('landing-bg.jpg') center/cover no-repeat;
+      background-color: #171522; /* Fallback color */
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #landingScreen h1 {
+      font-size: 34px;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    #landingScreen p {
+      font-size: 16px;
+      color: #e2d9eb;
+      margin-bottom: 35px;
+      max-width: 320px;
+      line-height: 1.4;
+    }
+
+    .enter-btn {
+      background: linear-gradient(135deg, #d29bc8, #8e6bb3);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(210, 155, 200, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .enter-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Main App Interface */
+    .app-wrapper {
+      min-height: 100vh;
+      /* Background Image for Player Screen */
+      background: linear-gradient(160deg, rgba(23, 21, 34, 0.85), rgba(48, 38, 61, 0.9)), url('player-bg.jpg') center/cover no-repeat;
+      background-color: #171522; /* Fallback color */
       display: flex;
       justify-content: center;
       padding: 25px 15px;
-      overflow-x: hidden;
-      position: relative;
     }
 
     .app {
@@ -185,7 +240,7 @@
       bottom: -50px;
       font-size: 28px;
       pointer-events: none;
-      z-index: 10;
+      z-index: 1000;
       animation: floatUp 3s linear forwards;
     }
 
@@ -204,74 +259,83 @@
 
 <body>
 
-  <div class="app">
+  <!-- Landing Interface -->
+  <div id="landingScreen">
+    <h1>Our Special Place ♡</h1>
+    <p>A little album of music and memories created just for you.</p>
+    <button class="enter-btn" onclick="enterAlbum()">Enter into precious album</button>
+  </div>
 
-    <div class="header">
-      <h1>Our Music ♡</h1>
-      <p>A little place for our songs</p>
-    </div>
+  <!-- Music Player Interface -->
+  <div class="app-wrapper">
+    <div class="app">
 
-    <div class="player">
-
-      <!-- Cover Image Slot -->
-      <div class="cover-container">
-        <img id="coverImage" class="cover" src="cover1.jpg" alt="Song Cover">
+      <div class="header">
+        <h1>Our Music ♡</h1>
+        <p>A little place for our songs</p>
       </div>
 
-      <div class="song-info">
-        <h2 id="title">Our First Song</h2>
-        <p id="artist">Our Playlist</p>
-      </div>
+      <div class="player">
 
-      <input type="range" id="progress" value="0" min="0" max="100">
-
-      <div class="time">
-        <span id="currentTime">0:00</span>
-        <span id="duration">0:00</span>
-      </div>
-
-      <div class="controls">
-        <button onclick="previousSong()">↶</button>
-        <button class="play" onclick="togglePlay()" id="playButton">▶</button>
-        <button onclick="nextSong()">↷</button>
-      </div>
-
-      <div class="volume">
-        <label>Volume</label>
-        <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
-      </div>
-
-    </div>
-
-    <div class="songs">
-      <h3>Our Songs</h3>
-
-      <div class="song" onclick="selectSong(0)">
-        <div class="song-number">01</div>
-        <div class="song-details">
-          <strong>Our First Song</strong>
-          <span>Tap to play</span>
+        <div class="cover-container">
+          <img id="coverImage" class="cover" src="cover1.jpg" alt="Song Cover">
         </div>
+
+        <div class="song-info">
+          <h2 id="title">Our First Song</h2>
+          <p id="artist">Our Playlist</p>
+        </div>
+
+        <input type="range" id="progress" value="0" min="0" max="100">
+
+        <div class="time">
+          <span id="currentTime">0:00</span>
+          <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls">
+          <button onclick="previousSong()">↶</button>
+          <button class="play" onclick="togglePlay()" id="playButton">▶</button>
+          <button onclick="nextSong()">↷</button>
+        </div>
+
+        <div class="volume">
+          <label>Volume</label>
+          <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+        </div>
+
       </div>
 
-      <div class="song" onclick="selectSong(1)">
-        <div class="song-number">02</div>
-        <div class="song-details">
-          <strong>Our Second Song</strong>
-          <span>Tap to play</span>
-        </div>
-      </div>
+      <div class="songs">
+        <h3>Our Songs</h3>
 
-      <div class="song" onclick="selectSong(2)">
-        <div class="song-number">03</div>
-        <div class="song-details">
-          <strong>Our Third Song</strong>
-          <span>Tap to play</span>
+        <div class="song" onclick="selectSong(0)">
+          <div class="song-number">01</div>
+          <div class="song-details">
+            <strong>Our First Song</strong>
+            <span>Tap to play</span>
+          </div>
         </div>
+
+        <div class="song" onclick="selectSong(1)">
+          <div class="song-number">02</div>
+          <div class="song-details">
+            <strong>Our Second Song</strong>
+            <span>Tap to play</span>
+          </div>
+        </div>
+
+        <div class="song" onclick="selectSong(2)">
+          <div class="song-number">03</div>
+          <div class="song-details">
+            <strong>Our Third Song</strong>
+            <span>Tap to play</span>
+          </div>
+        </div>
+
       </div>
 
     </div>
-
   </div>
 
   <audio id="audio"></audio>
@@ -279,13 +343,13 @@
   <script>
     const songs = [
       {
-        title: "Our First Song",
+        title: "chaar kadam ft.altu💞",
         artist: "Our Playlist",
         file: "song1.mp3",
         cover: "cover1.jpg"
       },
       {
-        title: "Our Second Song",
+        title: "dil haareya ft.altu💗",
         artist: "Our Playlist",
         file: "song2.mp3",
         cover: "cover2.jpg"
@@ -309,6 +373,7 @@
     const currentTime = document.getElementById("currentTime");
     const duration = document.getElementById("duration");
     const coverImage = document.getElementById("coverImage");
+    const landingScreen = document.getElementById("landingScreen");
 
     const emojiList = ["💖", "✨", "🌸", "💕", "🎶", "🥰", "💌", "⭐"];
 
@@ -325,6 +390,20 @@
           setTimeout(() => emoji.remove(), 4000);
         }, i * 120);
       }
+    }
+
+    function enterAlbum() {
+      // Hide Landing Screen
+      landingScreen.style.opacity = "0";
+      landingScreen.style.visibility = "hidden";
+
+      // Start Playing Music Directly
+      loadSong(0);
+      audio.play().then(() => {
+        playButton.textContent = "Ⅱ";
+      }).catch(e => console.log("Autoplay prevention:", e));
+
+      triggerEmojiBurst();
     }
 
     function loadSong(index) {
@@ -399,7 +478,7 @@
       audio.volume = volume.value;
     });
 
-    // Plays continuous music (automatically triggers next song when finished)
+    // Plays continuous music automatically
     audio.addEventListener("ended", () => {
       nextSong();
     });
