@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Our Music</title>
-
   <style>
     * {
       box-sizing: border-box;
@@ -21,11 +19,14 @@
       display: flex;
       justify-content: center;
       padding: 25px 15px;
+      overflow-x: hidden;
+      position: relative;
     }
 
     .app {
       width: 100%;
       max-width: 430px;
+      z-index: 2;
     }
 
     .header {
@@ -52,13 +53,20 @@
       margin-bottom: 22px;
     }
 
-    .cover {
+    .cover-container {
       width: 100%;
       aspect-ratio: 1;
       border-radius: 20px;
-      object-fit: cover;
       margin-bottom: 20px;
+      overflow: hidden;
       background: linear-gradient(135deg, #8e6bb3, #d69bb8);
+    }
+
+    .cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .song-info {
@@ -170,6 +178,27 @@
       color: #bdb3c5;
       font-size: 12px;
     }
+
+    /* Floating Emoji Animation */
+    .floating-emoji {
+      position: fixed;
+      bottom: -50px;
+      font-size: 28px;
+      pointer-events: none;
+      z-index: 10;
+      animation: floatUp 3s linear forwards;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.8) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.3) rotate(360deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 
@@ -184,8 +213,10 @@
 
     <div class="player">
 
-      <!-- Cover image -->
-      <div class="cover"></div>
+      <!-- Cover Image Slot -->
+      <div class="cover-container">
+        <img id="coverImage" class="cover" src="cover1.jpg" alt="Song Cover">
+      </div>
 
       <div class="song-info">
         <h2 id="title">Our First Song</h2>
@@ -246,22 +277,24 @@
   <audio id="audio"></audio>
 
   <script>
-
     const songs = [
       {
         title: "Our First Song",
         artist: "Our Playlist",
-        file: "song1.mp3"
+        file: "song1.mp3",
+        cover: "cover1.jpg"
       },
       {
         title: "Our Second Song",
         artist: "Our Playlist",
-        file: "song2.mp3"
+        file: "song2.mp3",
+        cover: "cover2.jpg"
       },
       {
         title: "Our Third Song",
         artist: "Our Playlist",
-        file: "song3.mp3"
+        file: "song3.mp3",
+        cover: "cover3.jpg"
       }
     ];
 
@@ -275,12 +308,31 @@
     const volume = document.getElementById("volume");
     const currentTime = document.getElementById("currentTime");
     const duration = document.getElementById("duration");
+    const coverImage = document.getElementById("coverImage");
+
+    const emojiList = ["💖", "✨", "🌸", "💕", "🎶", "🥰", "💌", "⭐"];
+
+    function triggerEmojiBurst() {
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const emoji = document.createElement("div");
+          emoji.className = "floating-emoji";
+          emoji.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+          emoji.style.left = Math.random() * 90 + 5 + "vw";
+          emoji.style.animationDuration = (Math.random() * 2 + 2) + "s";
+          document.body.appendChild(emoji);
+
+          setTimeout(() => emoji.remove(), 4000);
+        }, i * 120);
+      }
+    }
 
     function loadSong(index) {
       currentSong = index;
 
       title.textContent = songs[index].title;
       artist.textContent = songs[index].artist;
+      coverImage.src = songs[index].cover;
 
       audio.src = songs[index].file;
       progress.value = 0;
@@ -290,6 +342,7 @@
       if (audio.paused) {
         audio.play();
         playButton.textContent = "Ⅱ";
+        triggerEmojiBurst();
       } else {
         audio.pause();
         playButton.textContent = "▶";
@@ -300,39 +353,35 @@
       loadSong(index);
       audio.play();
       playButton.textContent = "Ⅱ";
+      triggerEmojiBurst();
     }
 
     function nextSong() {
       currentSong++;
-
       if (currentSong >= songs.length) {
         currentSong = 0;
       }
-
       loadSong(currentSong);
       audio.play();
       playButton.textContent = "Ⅱ";
+      triggerEmojiBurst();
     }
 
     function previousSong() {
       currentSong--;
-
       if (currentSong < 0) {
         currentSong = songs.length - 1;
       }
-
       loadSong(currentSong);
       audio.play();
       playButton.textContent = "Ⅱ";
+      triggerEmojiBurst();
     }
 
     audio.addEventListener("timeupdate", () => {
-
       if (audio.duration) {
-        progress.value =
-          (audio.currentTime / audio.duration) * 100;
+        progress.value = (audio.currentTime / audio.duration) * 100;
       }
-
       currentTime.textContent = formatTime(audio.currentTime);
     });
 
@@ -341,40 +390,29 @@
     });
 
     progress.addEventListener("input", () => {
-
       if (audio.duration) {
-        audio.currentTime =
-          (progress.value / 100) * audio.duration;
+        audio.currentTime = (progress.value / 100) * audio.duration;
       }
-
     });
 
     volume.addEventListener("input", () => {
       audio.volume = volume.value;
     });
 
+    // Plays continuous music (automatically triggers next song when finished)
     audio.addEventListener("ended", () => {
       nextSong();
     });
 
     function formatTime(seconds) {
-
-      if (isNaN(seconds)) {
-        return "0:00";
-      }
-
+      if (isNaN(seconds)) return "0:00";
       let minutes = Math.floor(seconds / 60);
       let secs = Math.floor(seconds % 60);
-
-      if (secs < 10) {
-        secs = "0" + secs;
-      }
-
+      if (secs < 10) secs = "0" + secs;
       return minutes + ":" + secs;
     }
 
     loadSong(0);
-
   </script>
 
 </body>
