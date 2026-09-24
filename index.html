@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Music</title>
+  <title>Our Music & Video Memories</title>
   <style>
     * {
       box-sizing: border-box;
@@ -177,7 +177,91 @@
       40%, 80% { transform: translateX(8px); }
     }
 
-    /* 3. Main Player Interface */
+    /* 3. Flower Bouquet Animation Screen */
+    #bouquetOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 85;
+      background: rgba(23, 21, 34, 0.88);
+      backdrop-filter: blur(15px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #bouquetOverlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .bouquet-wrapper {
+      width: 100%;
+      max-width: 480px;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bouquet-left, .bouquet-right {
+      position: absolute;
+      top: 50%;
+      font-size: 80px;
+      transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+    }
+
+    .bouquet-left {
+      left: 10px;
+      transform: translate(-150px, -50%) rotate(-25deg);
+    }
+
+    .bouquet-right {
+      right: 10px;
+      transform: translate(150px, -50%) rotate(25deg);
+    }
+
+    #bouquetOverlay.animate .bouquet-left {
+      transform: translate(0, -50%) rotate(0deg);
+    }
+
+    #bouquetOverlay.animate .bouquet-right {
+      transform: translate(0, -50%) rotate(0deg);
+    }
+
+    .gift-message-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 24px 20px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 260px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s;
+    }
+
+    #bouquetOverlay.animate .gift-message-card {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .gift-message-card h3 {
+      font-size: 20px;
+      color: #ffdae9;
+      line-height: 1.4;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    /* 4. Main Player Interface */
     .app-wrapper {
       min-height: 100vh;
       background: url('player-bg.jpg') center/cover no-repeat fixed;
@@ -314,28 +398,13 @@
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
     }
 
     .songs h3 {
       margin: 5px 8px 14px;
       font-size: 18px;
       text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    }
-
-    /* Scrollable Playlist Container */
-    .song-list-container {
-      max-height: 380px;
-      overflow-y: auto;
-      padding-right: 5px;
-    }
-
-    .song-list-container::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    .song-list-container::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
     }
 
     .song {
@@ -381,6 +450,128 @@
     .volume label {
       color: #d1c5db;
       font-size: 12px;
+    }
+
+    /* Page Navigation Button */
+    .next-page-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #d29bc8, #8e6bb3);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(210, 155, 200, 0.35);
+      transition: transform 0.2s, background 0.3s;
+      margin-bottom: 25px;
+    }
+
+    .next-page-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* 5. Video Gallery Slide Interface */
+    #videoPage {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      background: url('player-bg.jpg') center/cover no-repeat fixed;
+      background-color: #171522;
+      overflow-y: auto;
+      padding: 25px 15px;
+      display: flex;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #videoPage.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 15px;
+      cursor: pointer;
+      margin-bottom: 18px;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .main-video-card {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(18px);
+      border-radius: 25px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .main-video-card video {
+      width: 100%;
+      border-radius: 18px;
+      max-height: 250px;
+      background: #000;
+      outline: none;
+    }
+
+    .main-video-card h2 {
+      font-size: 18px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .video-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .video-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 18px;
+      padding: 10px;
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .video-item:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .video-thumb {
+      width: 75px;
+      height: 55px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #332d42;
+    }
+
+    .video-item-info {
+      flex: 1;
+    }
+
+    .video-item-info strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 3px;
+    }
+
+    .video-item-info span {
+      font-size: 12px;
+      color: #c4b8d2;
     }
 
     /* Floating Emoji Animation */
@@ -433,7 +624,20 @@
     </div>
   </div>
 
-  <!-- 3. Music Player Interface -->
+  <!-- 3. Flower Bouquet Overlay -->
+  <div id="bouquetOverlay">
+    <div class="bouquet-wrapper">
+      <div class="bouquet-left">💐</div>
+      
+      <div class="gift-message-card">
+        <h3>This is a gift for a precious person ♡</h3>
+      </div>
+
+      <div class="bouquet-right">💐</div>
+    </div>
+  </div>
+
+  <!-- 4. Music Player Interface -->
   <div class="app-wrapper">
     <div class="app">
 
@@ -476,108 +680,114 @@
       <div class="songs">
         <h3>Our Songs</h3>
 
-        <div class="song-list-container">
-          <div class="song" onclick="selectSong(0)">
-            <div class="song-number">01</div>
-            <div class="song-details">
-              <strong>Our First Song</strong>
-              <span>Tap to play</span>
+        <div class="song" onclick="selectSong(0)">
+          <div class="song-number">01</div>
+          <div class="song-details">
+            <strong>Our First Song</strong>
+            <span>Tap to play</span>
+          </div>
+        </div>
+
+        <div class="song" onclick="selectSong(1)">
+          <div class="song-number">02</div>
+          <div class="song-details">
+            <strong>Our Second Song</strong>
+            <span>Tap to play</span>
+          </div>
+        </div>
+
+        <div class="song" onclick="selectSong(2)">
+          <div class="song-number">03</div>
+          <div class="song-details">
+            <strong>Our Third Song</strong>
+            <span>Tap to play</span>
+          </div>
+        </div>
+
+        <div class="song" onclick="selectSong(3)">
+          <div class="song-number">04</div>
+          <div class="song-details">
+            <strong>Our Fourth Song</strong>
+            <span>Tap to play</span>
+          </div>
+        </div>
+
+        <div class="song" onclick="selectSong(4)">
+          <div class="song-number">05</div>
+          <div class="song-details">
+            <strong>Our Fifth Song</strong>
+            <span>Tap to play</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation to Video Gallery Slide -->
+      <button class="next-page-btn" onclick="openVideoPage()">Next Page: Our Video Gallery 🎬 ➔</button>
+
+    </div>
+  </div>
+
+  <!-- 5. Video Gallery Slide Interface -->
+  <div id="videoPage">
+    <div class="app">
+      
+      <button class="back-btn" onclick="closeVideoPage()">⇠ Back to Music Player</button>
+
+      <div class="header">
+        <h1>Our Couple Videos 📹</h1>
+        <p>Precious moments captured together</p>
+      </div>
+
+      <div class="main-video-card">
+        <video id="mainVideoPlayer" controls poster="videocover1.jpg">
+          <source id="videoSource" src="video1.mp4" type="video/mp4">
+          Your browser does not support HTML video.
+        </video>
+        <h2 id="mainVideoTitle">Memory 1: Our Favorite Video</h2>
+      </div>
+
+      <div class="songs">
+        <h3>Select a Video</h3>
+
+        <div class="video-grid">
+          <div class="video-item" onclick="selectVideo(0)">
+            <img class="video-thumb" src="videocover1.jpg" alt="Video 1 Thumb">
+            <div class="video-item-info">
+              <strong>Memory 01</strong>
+              <span>Tap to watch</span>
             </div>
           </div>
 
-          <div class="song" onclick="selectSong(1)">
-            <div class="song-number">02</div>
-            <div class="song-details">
-              <strong>Our Second Song</strong>
-              <span>Tap to play</span>
+          <div class="video-item" onclick="selectVideo(1)">
+            <img class="video-thumb" src="videocover2.jpg" alt="Video 2 Thumb">
+            <div class="video-item-info">
+              <strong>Memory 02</strong>
+              <span>Tap to watch</span>
             </div>
           </div>
 
-          <div class="song" onclick="selectSong(2)">
-            <div class="song-number">03</div>
-            <div class="song-details">
-              <strong>Our Third Song</strong>
-              <span>Tap to play</span>
+          <div class="video-item" onclick="selectVideo(2)">
+            <img class="video-thumb" src="videocover3.jpg" alt="Video 3 Thumb">
+            <div class="video-item-info">
+              <strong>Memory 03</strong>
+              <span>Tap to watch</span>
             </div>
           </div>
 
-          <div class="song" onclick="selectSong(3)">
-            <div class="song-number">04</div>
-            <div class="song-details">
-              <strong>Our Fourth Song</strong>
-              <span>Tap to play</span>
+          <div class="video-item" onclick="selectVideo(3)">
+            <img class="video-thumb" src="videocover4.jpg" alt="Video 4 Thumb">
+            <div class="video-item-info">
+              <strong>Memory 04</strong>
+              <span>Tap to watch</span>
             </div>
           </div>
 
-          <div class="song" onclick="selectSong(4)">
-            <div class="song-number">05</div>
-            <div class="song-details">
-              <strong>Our Fifth Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(5)">
-            <div class="song-number">06</div>
-            <div class="song-details">
-              <strong>Our Sixth Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(6)">
-            <div class="song-number">07</div>
-            <div class="song-details">
-              <strong>Our Seventh Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(7)">
-            <div class="song-number">08</div>
-            <div class="song-details">
-              <strong>Our Eighth Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(8)">
-            <div class="song-number">09</div>
-            <div class="song-details">
-              <strong>Our Ninth Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(9)">
-            <div class="song-number">10</div>
-            <div class="song-details">
-              <strong>Our Tenth Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(10)">
-            <div class="song-number">11</div>
-            <div class="song-details">
-              <strong>Our Eleventh Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(11)">
-            <div class="song-number">12</div>
-            <div class="song-details">
-              <strong>Our Twelfth Song</strong>
-              <span>Tap to play</span>
-            </div>
-          </div>
-
-          <div class="song" onclick="selectSong(12)">
-            <div class="song-number">13</div>
-            <div class="song-details">
-              <strong>Our Thirteenth Song</strong>
-              <span>Tap to play</span>
+          <div class="video-item" onclick="selectVideo(4)">
+            <img class="video-thumb" src="videocover5.jpg" alt="Video 5 Thumb">
+            <div class="video-item-info">
+              <strong>Memory 05</strong>
+              <span>Tap to watch</span>
             </div>
           </div>
         </div>
@@ -600,20 +810,22 @@
 
     let wrongAttempts = 0;
 
+    // 5 Song Slots
     const songs = [
       { title: "Our First Song", artist: "Our Playlist", file: "song1.mp3", cover: "cover1.jpg" },
       { title: "Our Second Song", artist: "Our Playlist", file: "song2.mp3", cover: "cover2.jpg" },
       { title: "Our Third Song", artist: "Our Playlist", file: "song3.mp3", cover: "cover3.jpg" },
       { title: "Our Fourth Song", artist: "Our Playlist", file: "song4.mp3", cover: "cover4.jpg" },
-      { title: "Our Fifth Song", artist: "Our Playlist", file: "song5.mp3", cover: "cover5.jpg" },
-      { title: "Our Sixth Song", artist: "Our Playlist", file: "song6.mp3", cover: "cover6.jpg" },
-      { title: "Our Seventh Song", artist: "Our Playlist", file: "song7.mp3", cover: "cover7.jpg" },
-      { title: "Our Eighth Song", artist: "Our Playlist", file: "song8.mp3", cover: "cover8.jpg" },
-      { title: "Our Ninth Song", artist: "Our Playlist", file: "song9.mp3", cover: "cover9.jpg" },
-      { title: "Our Tenth Song", artist: "Our Playlist", file: "song10.mp3", cover: "cover10.jpg" },
-      { title: "Our Eleventh Song", artist: "Our Playlist", file: "song11.mp3", cover: "cover11.jpg" },
-      { title: "Our Twelfth Song", artist: "Our Playlist", file: "song12.mp3", cover: "cover12.jpg" },
-      { title: "Our Thirteenth Song", artist: "Our Playlist", file: "song13.mp3", cover: "cover13.jpg" }
+      { title: "Our Fifth Song", artist: "Our Playlist", file: "song5.mp3", cover: "cover5.jpg" }
+    ];
+
+    // 5 Video Slots
+    const videos = [
+      { title: "Memory 1: Our Favorite Video", file: "video1.mp4", poster: "videocover1.jpg" },
+      { title: "Memory 2: Special Day Together", file: "video2.mp4", poster: "videocover2.jpg" },
+      { title: "Memory 3: Cute Moments", file: "video3.mp4", poster: "videocover3.jpg" },
+      { title: "Memory 4: Unforgettable Trip", file: "video4.mp4", poster: "videocover4.jpg" },
+      { title: "Memory 5: Sweet Smiles", file: "video5.mp4", poster: "videocover5.jpg" }
     ];
 
     let currentSong = 0;
@@ -631,6 +843,13 @@
     const passcodeScreen = document.getElementById("passcodeScreen");
     const hintBox = document.getElementById("hintBox");
     const passcodeInput = document.getElementById("passcodeInput");
+    const bouquetOverlay = document.getElementById("bouquetOverlay");
+
+    // Video elements
+    const videoPage = document.getElementById("videoPage");
+    const mainVideoPlayer = document.getElementById("mainVideoPlayer");
+    const videoSource = document.getElementById("videoSource");
+    const mainVideoTitle = document.getElementById("mainVideoTitle");
 
     const emojiList = ["💖", "✨", "🌸", "💕", "🎶", "🥰", "💌", "⭐"];
 
@@ -662,10 +881,25 @@
         passcodeScreen.style.opacity = "0";
         passcodeScreen.style.visibility = "hidden";
 
+        // Show Bouquet animation screen
+        bouquetOverlay.classList.add("active");
+        setTimeout(() => {
+          bouquetOverlay.classList.add("animate");
+        }, 100);
+
+        triggerEmojiBurst();
+
+        // Hide bouquet overlay after 3.5 seconds to reveal player
+        setTimeout(() => {
+          bouquetOverlay.classList.remove("animate");
+          setTimeout(() => {
+            bouquetOverlay.classList.remove("active");
+          }, 800);
+        }, 3500);
+
         loadSong(0);
         playButton.textContent = "▶";
 
-        triggerEmojiBurst();
       } else {
         wrongAttempts++;
         hintBox.style.display = "block";
@@ -770,6 +1004,29 @@
       let secs = Math.floor(seconds % 60);
       if (secs < 10) secs = "0" + secs;
       return minutes + ":" + secs;
+    }
+
+    // Video Page Navigation
+    function openVideoPage() {
+      if (!audio.paused) {
+        audio.pause();
+        playButton.textContent = "▶";
+      }
+      videoPage.classList.add("active");
+    }
+
+    function closeVideoPage() {
+      mainVideoPlayer.pause();
+      videoPage.classList.remove("active");
+    }
+
+    function selectVideo(index) {
+      videoSource.src = videos[index].file;
+      mainVideoPlayer.poster = videos[index].poster;
+      mainVideoTitle.textContent = videos[index].title;
+      mainVideoPlayer.load();
+      mainVideoPlayer.play();
+      triggerEmojiBurst();
     }
 
     loadSong(0);
