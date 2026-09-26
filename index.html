@@ -17,6 +17,7 @@
       color: white;
       overflow-x: hidden;
       position: relative;
+      touch-action: manipulation;
     }
 
     /* 1. Landing Screen Interface */
@@ -168,6 +169,9 @@
       font-size: 13px;
       line-height: 1.4;
       display: none;
+    }
+
+    .shake-effect {
       animation: shake 0.4s ease-in-out;
     }
 
@@ -269,6 +273,7 @@
       display: flex;
       justify-content: center;
       padding: 25px 15px;
+      position: relative;
     }
 
     .app {
@@ -297,6 +302,24 @@
       color: #e2d9eb;
       font-size: 14px;
       text-shadow: 0 1px 5px rgba(0,0,0,0.6);
+    }
+
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      font-size: 12px;
+      color: #ffb3c6;
+      font-weight: bold;
+      margin-bottom: 8px;
+      padding-right: 5px;
+      animation: bounce 1.8s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
     }
 
     .player {
@@ -452,7 +475,6 @@
       font-size: 12px;
     }
 
-    /* Page Navigation Button */
     .next-page-btn {
       width: 100%;
       padding: 16px;
@@ -465,11 +487,16 @@
       cursor: pointer;
       box-shadow: 0 8px 25px rgba(210, 155, 200, 0.35);
       transition: transform 0.2s, background 0.3s;
-      margin-bottom: 25px;
+      margin-bottom: 15px;
     }
 
     .next-page-btn:hover {
       transform: translateY(-2px);
+    }
+
+    .btn-top-accent {
+      background: linear-gradient(135deg, #e63956, #b81d3d) !important;
+      box-shadow: 0 8px 25px rgba(230, 57, 86, 0.4) !important;
     }
 
     /* 5. Page 2: Video Gallery Slide Interface */
@@ -528,7 +555,6 @@
       text-align: center;
     }
 
-    /* Scrollable Video List Container */
     .video-list-container {
       max-height: 380px;
       overflow-y: auto;
@@ -536,15 +562,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-    }
-
-    .video-list-container::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    .video-list-container::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
     }
 
     .video-item {
@@ -680,11 +697,7 @@
       border: 1px solid rgba(255, 255, 255, 0.2) !important;
     }
 
-    .btn-yes:active, .btn-no:active {
-      transform: scale(0.95);
-    }
-
-    /* Modal / Pop-Up Styles (Z-INDEX FIXED) */
+    /* Modal / Pop-Up Styles */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -754,18 +767,19 @@
       cursor: pointer;
     }
 
-    /* Heart Transition Zoom Animation (Z-INDEX FIXED) */
+    /* HEART DOOR & ZOOM ANIMATION */
     #heartTransition {
       position: fixed;
       inset: 0;
       z-index: 300;
-      background: #11050b;
+      background: #090206;
       display: flex;
       justify-content: center;
       align-items: center;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      overflow: hidden;
     }
 
     #heartTransition.active {
@@ -773,27 +787,66 @@
       visibility: visible;
     }
 
-    .tunnel-heart {
-      font-size: 180px;
-      animation: zoomIntoHeart 2.2s forwards cubic-bezier(0.7, 0, 0.84, 0);
+    .heart-portal-wrapper {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: portalZoom 2.2s forwards cubic-bezier(0.7, 0, 0.84, 0);
     }
 
-    @keyframes zoomIntoHeart {
-      0% {
-        transform: scale(0.8);
-        opacity: 0.8;
-      }
-      50% {
-        transform: scale(4);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(25);
-        opacity: 0;
-      }
+    .heart-door-left, .heart-door-right {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: radial-gradient(circle at center, #ff2a5f 0%, #a80028 100%);
+      border: 2px solid #ff9ebb;
+      box-shadow: 0 0 30px rgba(255, 42, 95, 0.8);
+      transition: transform 1.2s ease-in-out 0.3s;
     }
 
-    /* 7. Page 4: The Love Letter Interface (Z-INDEX FIXED) */
+    .heart-door-left {
+      left: 0;
+      border-radius: 140px 0 0 140px;
+      transform-origin: left center;
+    }
+
+    .heart-door-right {
+      right: 0;
+      border-radius: 0 140px 140px 0;
+      transform-origin: right center;
+    }
+
+    #heartTransition.animate-doors .heart-door-left {
+      transform: rotateY(-110deg);
+    }
+
+    #heartTransition.animate-doors .heart-door-right {
+      transform: rotateY(110deg);
+    }
+
+    .heart-light-beam {
+      position: absolute;
+      font-size: 120px;
+      filter: drop-shadow(0 0 40px #ff6699);
+      animation: pulseGlow 0.8s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { filter: drop-shadow(0 0 20px #ff3366); transform: scale(0.95); }
+      to { filter: drop-shadow(0 0 50px #ff99bb); transform: scale(1.05); }
+    }
+
+    @keyframes portalZoom {
+      0% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(35); opacity: 0; }
+    }
+
+    /* 7. Page 4: Love Letter Interface */
     #letterPage {
       position: fixed;
       inset: 0;
@@ -822,7 +875,7 @@
       width: 100%;
       max-width: 420px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .letter-header {
@@ -852,6 +905,163 @@
       font-weight: bold;
       color: #ffb3c6;
       font-size: 16px;
+    }
+
+    /* Finished Reading Button */
+    .finished-reading-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, #ff4071, #c9184a);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 64, 113, 0.4);
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .finished-reading-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* 8. Page 5: Archery Balloon Pop Game Interface */
+    #gamePage {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      background: radial-gradient(circle at top center, #2b1128 0%, #0d0714 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 10px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #gamePage.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .game-header {
+      text-align: center;
+      margin-top: 10px;
+      z-index: 10;
+    }
+
+    .game-header h2 {
+      font-size: 22px;
+      color: #ff9ebb;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 8px rgba(255, 42, 95, 0.6);
+    }
+
+    .game-header p {
+      font-size: 13px;
+      color: #e2d9eb;
+    }
+
+    .game-round-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      font-size: 12px;
+      color: #ffdae9;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Balloon Pop Messages Banner Box */
+    #gameMessageCard {
+      position: absolute;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.8);
+      width: 90%;
+      max-width: 360px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 180, 200, 0.4);
+      padding: 14px 18px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+      z-index: 20;
+    }
+
+    #gameMessageCard.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) scale(1);
+    }
+
+    #gameMessageCard p {
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      line-height: 1.4;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    /* Game Canvas Container */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Reset / Next Round Button Overlay */
+    #roundResetBtn {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.8);
+      background: linear-gradient(135deg, #ff4071, #ff80a0);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(255, 64, 113, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      z-index: 30;
+    }
+
+    #roundResetBtn.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) scale(1);
+      animation: pulseBtn 1.5s infinite alternate;
+    }
+
+    @keyframes pulseBtn {
+      from { transform: translateX(-50%) scale(1); }
+      to { transform: translateX(-50%) scale(1.08); }
     }
 
     /* Floating Emoji Animation */
@@ -894,9 +1104,7 @@
 
       <div class="code-input-container">
         <input type="password" id="passcodeInput" class="code-input" placeholder="••••••" maxlength="6">
-        
         <p class="permanent-hint">💡 Hint: The code consists of 6 numbers.</p>
-
         <button class="unlock-btn" onclick="checkPasscode()">Unlock Album ♡</button>
       </div>
 
@@ -908,11 +1116,9 @@
   <div id="bouquetOverlay">
     <div class="bouquet-wrapper">
       <div class="bouquet-left">💐</div>
-      
       <div class="gift-message-card">
         <h3>This is a gift for a precious person ♡</h3>
       </div>
-
       <div class="bouquet-right">💐</div>
     </div>
   </div>
@@ -926,8 +1132,11 @@
         <p>A little place for our songs</p>
       </div>
 
-      <div class="player">
+      <div class="scroll-hint">
+        <span>Scroll down for songs 📜👇</span>
+      </div>
 
+      <div class="player">
         <div class="cover-container">
           <img id="coverImage" class="cover" src="cover1.jpg" alt="Song Cover">
         </div>
@@ -954,52 +1163,30 @@
           <label>Volume</label>
           <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
         </div>
-
       </div>
 
       <div class="songs">
         <h3>Our Songs</h3>
-
         <div class="song" onclick="selectSong(0)">
           <div class="song-number">01</div>
-          <div class="song-details">
-            <strong>Our First Song</strong>
-            <span>Tap to play</span>
-          </div>
+          <div class="song-details"><strong>Our First Song</strong><span>Tap to play</span></div>
         </div>
-
         <div class="song" onclick="selectSong(1)">
           <div class="song-number">02</div>
-          <div class="song-details">
-            <strong>Our Second Song</strong>
-            <span>Tap to play</span>
-          </div>
+          <div class="song-details"><strong>Our Second Song</strong><span>Tap to play</span></div>
         </div>
-
         <div class="song" onclick="selectSong(2)">
           <div class="song-number">03</div>
-          <div class="song-details">
-            <strong>Our Third Song</strong>
-            <span>Tap to play</span>
-          </div>
+          <div class="song-details"><strong>Our Third Song</strong><span>Tap to play</span></div>
         </div>
-
         <div class="song" onclick="selectSong(3)">
           <div class="song-number">04</div>
-          <div class="song-details">
-            <strong>Our Fourth Song</strong>
-            <span>Tap to play</span>
-          </div>
+          <div class="song-details"><strong>Our Fourth Song</strong><span>Tap to play</span></div>
         </div>
-
         <div class="song" onclick="selectSong(4)">
           <div class="song-number">05</div>
-          <div class="song-details">
-            <strong>Our Fifth Song</strong>
-            <span>Tap to play</span>
-          </div>
+          <div class="song-details"><strong>Our Fifth Song</strong><span>Tap to play</span></div>
         </div>
-
       </div>
 
       <button class="next-page-btn" onclick="openVideoPage()">Next Page: Our Video Gallery 🎬 ➔</button>
@@ -1010,7 +1197,6 @@
   <!-- 5. Page 2: Video Gallery Slide Interface -->
   <div id="videoPage">
     <div class="app">
-      
       <button class="back-btn" onclick="closeVideoPage()">⇠ Back to Music Player</button>
 
       <div class="header">
@@ -1018,94 +1204,29 @@
         <p>Precious moments captured together</p>
       </div>
 
+      <button class="next-page-btn btn-top-accent" onclick="openHeartPage()">Enter My Heart 🫀 ➔</button>
+
       <div class="main-video-card">
         <video id="mainVideoPlayer" controls poster="videocover1.jpg">
           <source id="videoSource" src="video1.mp4" type="video/mp4">
-          Your browser does not support HTML video.
         </video>
         <h2 id="mainVideoTitle">Memory 1: Our Favorite Video</h2>
       </div>
 
       <div class="songs">
         <h3>Select a Video</h3>
-
         <div class="video-list-container">
-          <div class="video-item" onclick="selectVideo(0)">
-            <img class="video-thumb" src="videocover1.jpg" alt="Video 1 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 01</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(1)">
-            <img class="video-thumb" src="videocover2.jpg" alt="Video 2 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 02</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(2)">
-            <img class="video-thumb" src="videocover3.jpg" alt="Video 3 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 03</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(3)">
-            <img class="video-thumb" src="videocover4.jpg" alt="Video 4 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 04</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(4)">
-            <img class="video-thumb" src="videocover5.jpg" alt="Video 5 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 05</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(5)">
-            <img class="video-thumb" src="videocover6.jpg" alt="Video 6 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 06</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(6)">
-            <img class="video-thumb" src="videocover7.jpg" alt="Video 7 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 07</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(7)">
-            <img class="video-thumb" src="videocover8.jpg" alt="Video 8 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 08</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
-
-          <div class="video-item" onclick="selectVideo(8)">
-            <img class="video-thumb" src="videocover9.jpg" alt="Video 9 Thumb">
-            <div class="video-item-info">
-              <strong>Memory 09</strong>
-              <span>Tap to watch</span>
-            </div>
-          </div>
+          <div class="video-item" onclick="selectVideo(0)"><img class="video-thumb" src="videocover1.jpg"><div class="video-item-info"><strong>Memory 01</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(1)"><img class="video-thumb" src="videocover2.jpg"><div class="video-item-info"><strong>Memory 02</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(2)"><img class="video-thumb" src="videocover3.jpg"><div class="video-item-info"><strong>Memory 03</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(3)"><img class="video-thumb" src="videocover4.jpg"><div class="video-item-info"><strong>Memory 04</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(4)"><img class="video-thumb" src="videocover5.jpg"><div class="video-item-info"><strong>Memory 05</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(5)"><img class="video-thumb" src="videocover6.jpg"><div class="video-item-info"><strong>Memory 06</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(6)"><img class="video-thumb" src="videocover7.jpg"><div class="video-item-info"><strong>Memory 07</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(7)"><img class="video-thumb" src="videocover8.jpg"><div class="video-item-info"><strong>Memory 08</strong><span>Tap to watch</span></div></div>
+          <div class="video-item" onclick="selectVideo(8)"><img class="video-thumb" src="videocover9.jpg"><div class="video-item-info"><strong>Memory 09</strong><span>Tap to watch</span></div></div>
         </div>
-
       </div>
-
-      <button class="next-page-btn" onclick="openHeartPage()">Next Page: Enter My Heart 🫀 ➔</button>
 
     </div>
   </div>
@@ -1128,7 +1249,7 @@
 
   <!-- Verification Modal -->
   <div id="identifyModal" class="modal-overlay">
-    <div class="modal-box">
+    <div class="modal-box" id="identifyModalBox">
       <h3>Verification Required 🔒</h3>
       <p>Identify yourself:</p>
       <input type="text" id="identifyInput" class="modal-input" placeholder="Enter your name...">
@@ -1145,15 +1266,18 @@
     </div>
   </div>
 
-  <!-- Transition Overlay -->
+  <!-- Heart Opening & Zoom In Portal Overlay -->
   <div id="heartTransition">
-    <div class="tunnel-heart">🫀</div>
+    <div class="heart-portal-wrapper">
+      <div class="heart-light-beam">💖</div>
+      <div class="heart-door-left"></div>
+      <div class="heart-door-right"></div>
+    </div>
   </div>
 
   <!-- 7. Page 4: Love Letter Interface -->
   <div id="letterPage">
     <div class="app">
-      
       <button class="back-btn" onclick="closeLetterPage()">⇠ Exit Heart</button>
 
       <div class="letter-card">
@@ -1174,9 +1298,33 @@
           Forever Yours,<br>
           Altamash ♡
         </div>
-      </div>
 
+        <!-- NEW FINISHED READING BUTTON -->
+        <button class="finished-reading-btn" onclick="openGamePage()">Finished Reading 💌 ➔</button>
+      </div>
     </div>
+  </div>
+
+  <!-- 8. Page 5: Archery Balloon Pop Game Interface -->
+  <div id="gamePage">
+    <button class="back-btn" style="position: absolute; top: 15px; left: 15px; z-index: 40;" onclick="closeGamePage()">⇠ Exit Game</button>
+
+    <div class="game-header">
+      <h2>Pop My Heart Balloons 🏹🎈</h2>
+      <p>Pull back the arrow & aim at the floating balloons!</p>
+      <span class="game-round-badge" id="roundBadgeText">Round 1 / 3</span>
+    </div>
+
+    <!-- Message Display Card when Balloon Pops -->
+    <div id="gameMessageCard">
+      <p id="gameMessageText">Pop a balloon to reveal a secret cute note! ✨</p>
+    </div>
+
+    <div class="canvas-container">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <button id="roundResetBtn" onclick="nextGameRound()">Play Next Round 🔄</button>
   </div>
 
   <audio id="audio"></audio>
@@ -1186,7 +1334,6 @@
     const HINT_1 = "😜 Wrong code! Think of our special 6-digit date!";
     const HINT_2 = "🙄 Still wrong?! Hint: It's 123456! (Don't forget it!)";
 
-    // Set her name here (or leave as is, she can write anything to proceed)
     const ALLOWED_NAME = "Ananya"; 
 
     let wrongAttempts = 0;
@@ -1209,6 +1356,37 @@
       { title: "Memory 7: Fun Laughs", file: "video7.mp4", poster: "videocover7.jpg" },
       { title: "Memory 8: Late Night Drive", file: "video8.mp4", poster: "videocover8.jpg" },
       { title: "Memory 9: Forever Moment", file: "video9.mp4", poster: "videocover9.jpg" }
+    ];
+
+    /* 3 ROUNDS OF 6 CUTE MESSAGES (18 TOTAL) */
+    const balloonMessages = [
+      // Round 1
+      [
+        "Your smile literally brightens up my whole day! ☀️",
+        "I love you more than words can ever explain! 💖",
+        "You're my absolute favorite human being! 🥰",
+        "Every moment with you is my favorite moment! ✨",
+        "You make my heart skip a beat every single time! 🫀",
+        "Thank you for being my endless happiness! 🌸"
+      ],
+      // Round 2
+      [
+        "I'm so ridiculously lucky to have you in my life! 🍀",
+        "You look adorable even when you get mad! 😜",
+        "Sending you 1,000 warm soft hugs right now! 🫂",
+        "My heart belongs solely & forever to you! 🗝️",
+        "You are my peaceful safe haven! 🏡",
+        "Life is so much sweeter with you by my side! 🍯"
+      ],
+      // Round 3
+      [
+        "I can't wait to make 10,000 more memories together! 📸",
+        "You are my absolute dream come true! 💫",
+        "You inspire me to be a better person every day! 🌟",
+        "I love every single tiny detail about you! 🎀",
+        "You are my soulmate & best friend in one! 👫",
+        "Forever and always, you & me against the world! 🌎💕"
+      ]
     ];
 
     let currentSong = 0;
@@ -1235,12 +1413,14 @@
 
     const heartPage = document.getElementById("heartPage");
     const identifyModal = document.getElementById("identifyModal");
+    const identifyModalBox = document.getElementById("identifyModalBox");
     const welcomeModal = document.getElementById("welcomeModal");
     const identifyInput = document.getElementById("identifyInput");
     const heartTransition = document.getElementById("heartTransition");
     const letterPage = document.getElementById("letterPage");
+    const gamePage = document.getElementById("gamePage");
 
-    const emojiList = ["💖", "✨", "🌸", "💕", "🎶", "🥰", "💌", "⭐", "🫀"];
+    const emojiList = ["💖", "✨", "🌸", "💕", "🎶", "🥰", "💌", "⭐", "🫀", "🎈"];
 
     function triggerEmojiBurst() {
       for (let i = 0; i < 15; i++) {
@@ -1271,17 +1451,13 @@
         passcodeScreen.style.visibility = "hidden";
 
         bouquetOverlay.classList.add("active");
-        setTimeout(() => {
-          bouquetOverlay.classList.add("animate");
-        }, 100);
+        setTimeout(() => { bouquetOverlay.classList.add("animate"); }, 100);
 
         triggerEmojiBurst();
 
         setTimeout(() => {
           bouquetOverlay.classList.remove("animate");
-          setTimeout(() => {
-            bouquetOverlay.classList.remove("active");
-          }, 800);
+          setTimeout(() => { bouquetOverlay.classList.remove("active"); }, 800);
         }, 3500);
 
         loadSong(0);
@@ -1290,13 +1466,7 @@
       } else {
         wrongAttempts++;
         hintBox.style.display = "block";
-
-        if (wrongAttempts === 1) {
-          hintBox.textContent = HINT_1;
-        } else {
-          hintBox.textContent = HINT_2;
-        }
-
+        hintBox.textContent = wrongAttempts === 1 ? HINT_1 : HINT_2;
         hintBox.style.animation = 'none';
         hintBox.offsetHeight;
         hintBox.style.animation = null;
@@ -1304,18 +1474,14 @@
     }
 
     passcodeInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        checkPasscode();
-      }
+      if (e.key === "Enter") checkPasscode();
     });
 
     function loadSong(index) {
       currentSong = index;
-
       title.textContent = songs[index].title;
       artist.textContent = songs[index].artist;
       coverImage.src = songs[index].cover;
-
       audio.src = songs[index].file;
       progress.value = 0;
     }
@@ -1339,10 +1505,7 @@
     }
 
     function nextSong() {
-      currentSong++;
-      if (currentSong >= songs.length) {
-        currentSong = 0;
-      }
+      currentSong = (currentSong + 1) % songs.length;
       loadSong(currentSong);
       audio.play();
       playButton.textContent = "Ⅱ";
@@ -1350,10 +1513,7 @@
     }
 
     function previousSong() {
-      currentSong--;
-      if (currentSong < 0) {
-        currentSong = songs.length - 1;
-      }
+      currentSong = (currentSong - 1 + songs.length) % songs.length;
       loadSong(currentSong);
       audio.play();
       playButton.textContent = "Ⅱ";
@@ -1361,9 +1521,7 @@
     }
 
     audio.addEventListener("timeupdate", () => {
-      if (audio.duration) {
-        progress.value = (audio.currentTime / audio.duration) * 100;
-      }
+      if (audio.duration) progress.value = (audio.currentTime / audio.duration) * 100;
       currentTime.textContent = formatTime(audio.currentTime);
     });
 
@@ -1372,18 +1530,11 @@
     });
 
     progress.addEventListener("input", () => {
-      if (audio.duration) {
-        audio.currentTime = (progress.value / 100) * audio.duration;
-      }
+      if (audio.duration) audio.currentTime = (progress.value / 100) * audio.duration;
     });
 
-    volume.addEventListener("input", () => {
-      audio.volume = volume.value;
-    });
-
-    audio.addEventListener("ended", () => {
-      nextSong();
-    });
+    volume.addEventListener("input", () => { audio.volume = volume.value; });
+    audio.addEventListener("ended", () => { nextSong(); });
 
     function formatTime(seconds) {
       if (isNaN(seconds)) return "0:00";
@@ -1394,10 +1545,7 @@
     }
 
     function openVideoPage() {
-      if (!audio.paused) {
-        audio.pause();
-        playButton.textContent = "▶";
-      }
+      if (!audio.paused) { audio.pause(); playButton.textContent = "▶"; }
       videoPage.classList.add("active");
     }
 
@@ -1420,9 +1568,7 @@
       heartPage.classList.add("active");
     }
 
-    function closeHeartPage() {
-      heartPage.classList.remove("active");
-    }
+    function closeHeartPage() { heartPage.classList.remove("active"); }
 
     function handleNoClick() {
       alert("Access Denied! 😉 You are the only one allowed inside my heart! Please click YES! ♡");
@@ -1434,40 +1580,426 @@
     }
 
     function verifyIdentity() {
-      const enteredName = identifyInput.value.trim();
-
-      if (enteredName.length > 0) {
+      if (identifyInput.value.trim().toLowerCase() === ALLOWED_NAME.trim().toLowerCase()) {
         identifyModal.classList.remove("active");
         welcomeModal.classList.add("active");
         triggerEmojiBurst();
       } else {
-        alert("Please enter your name to identify yourself! ♡");
+        alert("❌ ACCESS DENIED! ❌\nOnly my special person is allowed inside my heart!");
+        identifyModalBox.classList.remove("shake-effect");
+        void identifyModalBox.offsetWidth;
+        identifyModalBox.classList.add("shake-effect");
       }
     }
 
     identifyInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        verifyIdentity();
-      }
+      if (e.key === "Enter") verifyIdentity();
     });
 
     function startHeartTransition() {
       welcomeModal.classList.remove("active");
       heartTransition.classList.add("active");
-
+      setTimeout(() => { heartTransition.classList.add("animate-doors"); }, 300);
       setTimeout(() => {
         heartPage.classList.remove("active");
         videoPage.classList.remove("active");
         letterPage.classList.add("active");
-      }, 1400);
-
+      }, 1600);
       setTimeout(() => {
         heartTransition.classList.remove("active");
-      }, 2200);
+        heartTransition.classList.remove("animate-doors");
+      }, 2300);
     }
 
-    function closeLetterPage() {
+    function closeLetterPage() { letterPage.classList.remove("active"); }
+
+    function openGamePage() {
       letterPage.classList.remove("active");
+      gamePage.classList.add("active");
+      initGame();
+    }
+
+    function closeGamePage() {
+      gamePage.classList.remove("active");
+      stopGameLoop();
+    }
+
+    /* ======================================================
+       9. ARCHERY BALLOON POP GAME ENGINE (CANVAS 2D)
+    ====================================================== */
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const msgCard = document.getElementById("gameMessageCard");
+    const msgText = document.getElementById("gameMessageText");
+    const resetBtn = document.getElementById("roundResetBtn");
+    const roundBadge = document.getElementById("roundBadgeText");
+
+    let animationFrameId;
+    let gameRound = 0; // 0, 1, 2
+    let balloons = [];
+    let particles = [];
+    let arrow = null;
+    let poppedCount = 0;
+
+    // Bow mechanics state
+    let bowPos = { x: 0, y: 0 };
+    let dragPos = { x: 0, y: 0 };
+    let isDragging = false;
+
+    const balloonColors = ['#ff4d6d', '#ff758f', '#ff8fa3', '#b5179e', '#7209b7', '#ffb703'];
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      bowPos = { x: canvas.width / 2, y: canvas.height - 70 };
+    }
+
+    class Balloon {
+      constructor(index, text) {
+        this.index = index;
+        this.text = text;
+        this.radius = 22 + Math.random() * 4;
+        this.x = (canvas.width / 7) * (index + 1);
+        this.y = 80 + Math.random() * 40;
+        this.baseY = this.y;
+        this.color = balloonColors[index % balloonColors.length];
+        this.speedOffset = Math.random() * Math.PI * 2;
+        this.popped = false;
+      }
+
+      update() {
+        if (this.popped) return;
+        this.speedOffset += 0.03;
+        this.y = this.baseY + Math.sin(this.speedOffset) * 12;
+      }
+
+      draw() {
+        if (this.popped) return;
+
+        // Balloon string
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y + this.radius);
+        ctx.quadraticCurveTo(this.x + 5, this.y + this.radius + 20, this.x, this.y + this.radius + 35);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Balloon Body
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y, this.radius * 0.85, this.radius, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Balloon highlight
+        ctx.beginPath();
+        ctx.ellipse(this.x - this.radius * 0.3, this.y - this.radius * 0.3, 4, 7, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.fill();
+
+        // Knot
+        ctx.beginPath();
+        ctx.moveTo(this.x - 3, this.y + this.radius);
+        ctx.lineTo(this.x + 3, this.y + this.radius);
+        ctx.lineTo(this.x, this.y + this.radius + 5);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    class Arrow {
+      constructor(x, y, vx, vy, angle) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.angle = angle;
+        this.active = true;
+      }
+
+      update() {
+        if (!this.active) return;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.15; // Gravity effect
+        this.angle = Math.atan2(this.vy, this.vx);
+
+        // Check canvas bounds
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.active = false;
+        }
+      }
+
+      draw() {
+        if (!this.active) return;
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+
+        // Shaft
+        ctx.beginPath();
+        ctx.moveTo(-30, 0);
+        ctx.lineTo(15, 0);
+        ctx.strokeStyle = "#e2d9eb";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Heart Arrowhead
+        ctx.beginPath();
+        ctx.fillStyle = "#ff2a5f";
+        ctx.arc(15, -3, 4, 0, Math.PI * 2);
+        ctx.arc(15, 3, 4, 0, Math.PI * 2);
+        ctx.lineTo(24, 0);
+        ctx.fill();
+
+        // Feathers
+        ctx.beginPath();
+        ctx.moveTo(-30, 0);
+        ctx.lineTo(-38, -6);
+        ctx.moveTo(-30, 0);
+        ctx.lineTo(-38, 6);
+        ctx.strokeStyle = "#ffb3c6";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.radius = Math.random() * 4 + 2;
+        this.vx = (Math.random() - 0.5) * 8;
+        this.vy = (Math.random() - 0.5) * 8;
+        this.alpha = 1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= 0.03;
+      }
+
+      draw() {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function createPopParticles(x, y, color) {
+      for (let i = 0; i < 20; i++) {
+        particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function initGame() {
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      gameRound = 0;
+      setupRound();
+      setupTouchEvents();
+      stopGameLoop();
+      gameLoop();
+    }
+
+    function setupRound() {
+      roundBadge.textContent = `Round ${gameRound + 1} / 3`;
+      poppedCount = 0;
+      resetBtn.classList.remove("active");
+      msgCard.classList.remove("show");
+
+      const roundMsgs = balloonMessages[gameRound % balloonMessages.length];
+      balloons = [];
+      for (let i = 0; i < 6; i++) {
+        balloons.push(new Balloon(i, roundMsgs[i]));
+      }
+    }
+
+    function drawBow() {
+      ctx.save();
+      
+      let pullX = bowPos.x;
+      let pullY = bowPos.y;
+      let angle = -Math.PI / 2;
+
+      if (isDragging) {
+        const dx = dragPos.x - bowPos.x;
+        const dy = dragPos.y - bowPos.y;
+        angle = Math.atan2(dy, dx);
+        pullX = dragPos.x;
+        pullY = dragPos.y;
+      }
+
+      // Draw Bow Arc
+      ctx.translate(bowPos.x, bowPos.y);
+      ctx.rotate(angle + Math.PI / 2);
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 45, Math.PI * 0.15, Math.PI * 0.85, false);
+      ctx.strokeStyle = "#d29bc8";
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      ctx.restore();
+
+      // Draw Bowstring
+      const bowLeft = { x: bowPos.x + Math.cos(angle - Math.PI/2) * 44, y: bowPos.y + Math.sin(angle - Math.PI/2) * 44 };
+      const bowRight = { x: bowPos.x + Math.cos(angle + Math.PI/2) * 44, y: bowPos.y + Math.sin(angle + Math.PI/2) * 44 };
+
+      ctx.beginPath();
+      ctx.moveTo(bowLeft.x, bowLeft.y);
+      ctx.lineTo(pullX, pullY);
+      ctx.lineTo(bowRight.x, bowRight.y);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw Arrow on string when dragging or idle
+      if (!arrow || !arrow.active) {
+        ctx.save();
+        ctx.translate(pullX, pullY);
+        ctx.rotate(angle);
+
+        ctx.beginPath();
+        ctx.moveTo(-30, 0);
+        ctx.lineTo(15, 0);
+        ctx.strokeStyle = "#e2d9eb";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.fillStyle = "#ff2a5f";
+        ctx.arc(15, -3, 4, 0, Math.PI * 2);
+        ctx.arc(15, 3, 4, 0, Math.PI * 2);
+        ctx.lineTo(24, 0);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    function checkCollisions() {
+      if (!arrow || !arrow.active) return;
+
+      balloons.forEach(balloon => {
+        if (!balloon.popped) {
+          const dist = Math.hypot(arrow.x - balloon.x, arrow.y - balloon.y);
+          if (dist < balloon.radius + 10) {
+            balloon.popped = true;
+            arrow.active = false;
+            poppedCount++;
+
+            createPopParticles(balloon.x, balloon.y, balloon.color);
+            triggerEmojiBurst();
+
+            // Display pop-up cute message
+            msgText.textContent = balloon.text;
+            msgCard.classList.remove("show");
+            void msgCard.offsetWidth;
+            msgCard.classList.add("show");
+
+            if (poppedCount === 6) {
+              setTimeout(() => {
+                resetBtn.classList.add("active");
+                if (gameRound < 2) {
+                  resetBtn.textContent = "Play Next Round 🔄";
+                } else {
+                  resetBtn.textContent = "Replay All Messages 🔄";
+                }
+              }, 600);
+            }
+          }
+        }
+      });
+    }
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      balloons.forEach(b => { b.update(); b.draw(); });
+
+      if (arrow) {
+        arrow.update();
+        arrow.draw();
+        checkCollisions();
+      }
+
+      particles.forEach((p, index) => {
+        p.update();
+        p.draw();
+        if (p.alpha <= 0) particles.splice(index, 1);
+      });
+
+      drawBow();
+
+      animationFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    function stopGameLoop() {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    }
+
+    function setupTouchEvents() {
+      const getPos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      };
+
+      const startDrag = (e) => {
+        isDragging = true;
+        dragPos = getPos(e);
+      };
+
+      const doDrag = (e) => {
+        if (!isDragging) return;
+        dragPos = getPos(e);
+      };
+
+      const endDrag = () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const dx = bowPos.x - dragPos.x;
+        const dy = bowPos.y - dragPos.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > 15) {
+          const power = Math.min(dist * 0.22, 18);
+          const angle = Math.atan2(dy, dx);
+          const vx = Math.cos(angle) * power;
+          const vy = Math.sin(angle) * power;
+
+          arrow = new Arrow(bowPos.x, bowPos.y, vx, vy, angle);
+        }
+      };
+
+      canvas.addEventListener('mousedown', startDrag);
+      canvas.addEventListener('mousemove', doDrag);
+      window.addEventListener('mouseup', endDrag);
+
+      canvas.addEventListener('touchstart', startDrag, { passive: true });
+      canvas.addEventListener('touchmove', doDrag, { passive: true });
+      window.addEventListener('touchend', endDrag);
+    }
+
+    function nextGameRound() {
+      gameRound = (gameRound + 1) % 3;
+      setupRound();
     }
 
     loadSong(0);
