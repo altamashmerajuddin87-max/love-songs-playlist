@@ -181,7 +181,7 @@
     #bouquetOverlay {
       position: fixed;
       inset: 0;
-      z-index: 85;
+      z-index: 150;
       background: rgba(23, 21, 34, 0.88);
       backdrop-filter: blur(15px);
       display: flex;
@@ -476,7 +476,7 @@
     #videoPage {
       position: fixed;
       inset: 0;
-      z-index: 80;
+      z-index: 50;
       background: url('player-bg.jpg') center/cover no-repeat fixed;
       background-color: #171522;
       overflow-y: auto;
@@ -528,7 +528,7 @@
       text-align: center;
     }
 
-    /* Scrollable Video List Container (for 9 videos) */
+    /* Scrollable Video List Container */
     .video-list-container {
       max-height: 380px;
       overflow-y: auto;
@@ -591,7 +591,7 @@
     #heartPage {
       position: fixed;
       inset: 0;
-      z-index: 75;
+      z-index: 60;
       background: radial-gradient(circle at center, #2e111d 0%, #100a14 100%);
       display: flex;
       flex-direction: column;
@@ -684,7 +684,7 @@
       transform: scale(0.95);
     }
 
-    /* Modal / Pop-Up Styles */
+    /* Modal / Pop-Up Styles (Z-INDEX FIXED) */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -754,7 +754,7 @@
       cursor: pointer;
     }
 
-    /* Heart Transition Zoom Animation */
+    /* Heart Transition Zoom Animation (Z-INDEX FIXED) */
     #heartTransition {
       position: fixed;
       inset: 0;
@@ -793,7 +793,7 @@
       }
     }
 
-    /* 7. Page 4: The Love Letter Interface */
+    /* 7. Page 4: The Love Letter Interface (Z-INDEX FIXED) */
     #letterPage {
       position: fixed;
       inset: 0;
@@ -891,7 +891,7 @@
     <div class="lock-card">
       <h2>Secret Passcode 🔒</h2>
       <p>Enter the secret code to unlock our playlist!</p>
-      
+
       <div class="code-input-container">
         <input type="password" id="passcodeInput" class="code-input" placeholder="••••••" maxlength="6">
         
@@ -1182,20 +1182,15 @@
   <audio id="audio"></audio>
 
   <script>
-    // -------------------------------------------------------------
-    // CUSTOMIZE YOUR CODE, HINTS, AND ALLOWED NAME HERE:
-    // -------------------------------------------------------------
-    const SECRET_CODE = "123456"; // 6-digit passcode
+    const SECRET_CODE = "123456";
     const HINT_1 = "😜 Wrong code! Think of our special 6-digit date!";
     const HINT_2 = "🙄 Still wrong?! Hint: It's 123456! (Don't forget it!)";
 
-    // NAME ALLOWED TO ENTER THE HEART (Case insensitive check):
+    // Set her name here (or leave as is, she can write anything to proceed)
     const ALLOWED_NAME = "Ananya"; 
-    // -------------------------------------------------------------
 
     let wrongAttempts = 0;
 
-    // 5 Song Slots
     const songs = [
       { title: "Our First Song", artist: "Our Playlist", file: "song1.mp3", cover: "cover1.jpg" },
       { title: "Our Second Song", artist: "Our Playlist", file: "song2.mp3", cover: "cover2.jpg" },
@@ -1204,7 +1199,6 @@
       { title: "Our Fifth Song", artist: "Our Playlist", file: "song5.mp3", cover: "cover5.jpg" }
     ];
 
-    // 9 Video Slots
     const videos = [
       { title: "Memory 1: Our Favorite Video", file: "video1.mp4", poster: "videocover1.jpg" },
       { title: "Memory 2: Special Day Together", file: "video2.mp4", poster: "videocover2.jpg" },
@@ -1234,13 +1228,11 @@
     const passcodeInput = document.getElementById("passcodeInput");
     const bouquetOverlay = document.getElementById("bouquetOverlay");
 
-    // Video elements
     const videoPage = document.getElementById("videoPage");
     const mainVideoPlayer = document.getElementById("mainVideoPlayer");
     const videoSource = document.getElementById("videoSource");
     const mainVideoTitle = document.getElementById("mainVideoTitle");
 
-    // Heart Page & Modal elements
     const heartPage = document.getElementById("heartPage");
     const identifyModal = document.getElementById("identifyModal");
     const welcomeModal = document.getElementById("welcomeModal");
@@ -1401,7 +1393,6 @@
       return minutes + ":" + secs;
     }
 
-    // Video Page Navigation
     function openVideoPage() {
       if (!audio.paused) {
         audio.pause();
@@ -1424,7 +1415,6 @@
       triggerEmojiBurst();
     }
 
-    // Page 3: Heart Page Navigation & Logic
     function openHeartPage() {
       mainVideoPlayer.pause();
       heartPage.classList.add("active");
@@ -1444,10 +1434,9 @@
     }
 
     function verifyIdentity() {
-      const enteredName = identifyInput.value.trim().toLowerCase();
+      const enteredName = identifyInput.value.trim();
 
-      // Check against allowed name (accepts name or if she types anything loving)
-      if (enteredName === ALLOWED_NAME.toLowerCase() || enteredName.length > 0) {
+      if (enteredName.length > 0) {
         identifyModal.classList.remove("active");
         welcomeModal.classList.add("active");
         triggerEmojiBurst();
@@ -1470,7 +1459,7 @@
         heartPage.classList.remove("active");
         videoPage.classList.remove("active");
         letterPage.classList.add("active");
-      }, 1500);
+      }, 1400);
 
       setTimeout(() => {
         heartTransition.classList.remove("active");
