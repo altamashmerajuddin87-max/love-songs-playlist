@@ -855,7 +855,7 @@
       z-index: 70;
       background: radial-gradient(circle at center, #2d1624 0%, #120914 100%);
       overflow-y: auto;
-      padding: 30px 15px;
+      padding: 30px 15px 90px; /* Extra bottom padding so floating button doesn't cover content */
       display: flex;
       justify-content: center;
       opacity: 0;
@@ -871,7 +871,7 @@
     .letter-card {
       background: rgba(255, 245, 248, 0.08);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 180, 200, 0.3);
+      border:1px solid rgba(255, 180, 200, 0.3);
       border-radius: 25px;
       padding: 30px 22px;
       width: 100%;
@@ -909,24 +909,29 @@
       font-size: 16px;
     }
 
-    /* Finished Reading Button */
-    .finished-reading-btn {
-      width: 100%;
-      margin-top: 20px;
-      padding: 16px;
+    /* CHANGE 2: Floating Circular Navigation Button on Page 4 */
+    .floating-nav-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
       background: linear-gradient(135deg, #ff4071, #c9184a);
-      border: none;
-      border-radius: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
       color: white;
-      font-size: 16px;
-      font-weight: bold;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(255, 64, 113, 0.4);
-      transition: transform 0.2s, background 0.3s;
+      box-shadow: 0 8px 25px rgba(255, 64, 113, 0.6);
+      z-index: 99;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .finished-reading-btn:active {
-      transform: scale(0.97);
+    .floating-nav-btn:active {
+      transform: scale(0.92);
     }
 
     /* 8. Page 5: Archery Balloon Pop Game Interface */
@@ -981,10 +986,30 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    /* CHANGE 1: Audio Upload Control Styling for Game Page */
+    .bg-music-upload {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #e2d9eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .bg-music-upload label {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-weight: bold;
+    }
+
     /* Balloon Pop Messages Banner Box */
     #gameMessageCard {
       position: absolute;
-      top: 85px;
+      top: 115px;
       left: 50%;
       transform: translateX(-50%) scale(0.8);
       width: 90%;
@@ -1021,7 +1046,7 @@
       position: relative;
       width: 100%;
       max-width: 420px;
-      height: 55vh;
+      height: 52vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1214,6 +1239,25 @@
       font-size: 24px;
       line-height: 1.5;
       text-shadow: 0 4px 15px rgba(255, 71, 87, 0.5);
+      margin-bottom: 25px;
+    }
+
+    /* CHANGE 3: Return to Music Player Button on Final Screen */
+    .return-home-btn {
+      padding: 14px 28px;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      background: linear-gradient(135deg, #d29bc8, #8e6bb3);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(210, 155, 200, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .return-home-btn:active {
+      transform: scale(0.95);
     }
 
     /* Floating Emoji Animation */
@@ -1450,11 +1494,11 @@
           Forever Yours,<br>
           Altamash ♡
         </div>
-
-        <!-- FINISHED READING BUTTON -->
-        <button class="finished-reading-btn" onclick="openGamePage()">Finished Reading 💌 ➔</button>
       </div>
     </div>
+
+    <!-- CHANGE 2: Circular Floating Button to navigate to Page 5 -->
+    <button class="floating-nav-btn" title="Go to Balloon Game" onclick="openGamePage()">➔</button>
   </div>
 
   <!-- 8. Page 5: Archery Balloon Pop Game Interface -->
@@ -1465,6 +1509,13 @@
       <h2>Pop My Heart Balloons 🏹🎈</h2>
       <p>Pull back the arrow & aim at the floating balloons!</p>
       <span class="game-round-badge" id="roundBadgeText">Round 1 / 3</span>
+      
+      <!-- CHANGE 1: Custom Music File Upload -->
+      <div class="bg-music-upload">
+        <span>🎶 Custom Music:</span>
+        <label for="customGameMusic">Choose File</label>
+        <input type="file" id="customGameMusic" accept="audio/*" style="display:none;" onchange="loadCustomGameMusic(event)">
+      </div>
     </div>
 
     <!-- Message Display Card when Balloon Pops -->
@@ -1509,15 +1560,18 @@
   <!-- Final Psycho Acceptance Message Overlay -->
   <div id="finalPsychoOverlay">
     <h2>🎉 Yay! 🎉<br><br>Finally now you are tied with a psycho which will create unique things to make you happy. ❤️✨</h2>
+    <!-- CHANGE 3: Return Button to Main Music Player -->
+    <button class="return-home-btn" onclick="returnToMusicPlayer()">🎵 Return to Music Player</button>
   </div>
 
+  <!-- Audio Elements -->
   <audio id="audio"></audio>
+  <audio id="customGameAudio" loop></audio>
 
   <script>
     const SECRET_CODE = "123456";
     const HINT_1 = "😜 Wrong code! Think of our special 6-digit date!";
     const HINT_2 = "🙄 Still wrong?! Hint: It's 123456! (Don't forget it!)";
-
     const ALLOWED_NAME = "Ananya"; 
 
     let wrongAttempts = 0;
@@ -1525,6 +1579,8 @@
     /* AUDIO SYNTHESIS ENGINE FOR CUTE BG MUSIC & POP SOUND */
     let audioCtx = null;
     let bgMusicInterval = null;
+    let hasCustomGameMusic = false;
+    const customGameAudio = document.getElementById("customGameAudio");
 
     function initAudioEngine() {
       if (!audioCtx) {
@@ -1532,7 +1588,26 @@
       }
     }
 
+    /* CHANGE 1: Handle Custom Background Music Upload */
+    function loadCustomGameMusic(event) {
+      const file = event.target.files[0];
+      if (file) {
+        stopCuteBgMusic();
+        const objectUrl = URL.createObjectURL(file);
+        customGameAudio.src = objectUrl;
+        hasCustomGameMusic = true;
+        if (gamePage.classList.contains("active")) {
+          customGameAudio.play();
+        }
+      }
+    }
+
     function startCuteBgMusic() {
+      if (hasCustomGameMusic) {
+        customGameAudio.play();
+        return;
+      }
+
       initAudioEngine();
       if (bgMusicInterval) return;
 
@@ -1561,6 +1636,9 @@
     }
 
     function stopCuteBgMusic() {
+      if (hasCustomGameMusic) {
+        customGameAudio.pause();
+      }
       if (bgMusicInterval) {
         clearInterval(bgMusicInterval);
         bgMusicInterval = null;
@@ -1880,7 +1958,7 @@
       stopGameLoop();
     }
 
-    /* PROPOSAL PAGE (PAGE 6) LOGIC */
+    /* PROPOSAL PAGE LOGIC */
     function openProposalPage() {
       closeGamePage();
       proposalPage.classList.add("active");
@@ -1909,8 +1987,20 @@
       }, 800);
     }
 
+    /* CHANGE 3: Function to Return to Music Player from Final Screen */
+    function returnToMusicPlayer() {
+      finalPsychoOverlay.classList.remove("active");
+      proposalPage.classList.remove("active");
+      proposalPage.classList.remove("animate");
+      letterPage.classList.remove("active");
+      heartPage.classList.remove("active");
+      videoPage.classList.remove("active");
+      gamePage.classList.remove("active");
+      stopCuteBgMusic();
+    }
+
     /* ======================================================
-       9. ARCHERY BALLOON POP GAME ENGINE (CANVAS 2D)
+       ARCHERY BALLOON POP GAME ENGINE (CANVAS 2D)
     ====================================================== */
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
@@ -2040,7 +2130,7 @@
         ctx.lineTo(24, 0);
         ctx.fill();
 
-        // Feathers
+   // Feathers
         ctx.beginPath();
         ctx.moveTo(-30, 0);
         ctx.lineTo(-38, -6);
