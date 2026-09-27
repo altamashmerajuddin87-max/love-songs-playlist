@@ -2003,6 +2003,51 @@
     }
 
     loadSong(0);
+    <!-- Background Music & Audio Elements -->
+<audio id="bg-music" src="assets/cute-bgm.mp3" loop></audio>
+<audio id="pop-sound" src="assets/pop-sound.mp3"></audio>
+
+<!-- Page 3: Balloon Game Container -->
+<div id="page-3" class="page">
+  <div id="game-container">
+    <!-- Balloon and Arrow Game Canvas / Elements Here -->
+  </div>
+  
+  <!-- Next Page Button -->
+  <button id="next-btn-p3" onclick="goToPage(4)">Next &rarr;</button>
+</div>
+
+<!-- Page 4: Proposal Page -->
+<div id="page-4" class="page hidden">
+  <div class="proposal-container">
+    <!-- Animated Hands holding Bouquet/Rose -->
+    <div class="hands-wrapper">
+      <div class="hand left-hand"></div>
+      <div class="hand right-hand"></div>
+      <img src="assets/bouquet.png" alt="Bouquet" class="bouquet-img">
+    </div>
+
+    <!-- Proposal Text -->
+    <h2 class="proposal-text">So after all this, will you be my forever?</h2>
+
+    <!-- Response Buttons -->
+    <div class="button-group">
+      <button class="btn yes-btn" onclick="handleYes()">Yes</button>
+      <button class="btn no-btn" onclick="handleNo()">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Pop-up Modal -->
+<div id="custom-modal" class="modal hidden">
+  <div class="modal-content">
+    <p id="modal-text"></p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<!-- Confetti Canvas for Big Popper Effect -->
+<canvas id="confetti-canvas"></canvas>
   </script>
 
 </body>
