@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Our Special Memories & Heart</title>
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -1019,7 +1021,7 @@
       position: relative;
       width: 100%;
       max-width: 420px;
-      height: 60vh;
+      height: 55vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1064,6 +1066,156 @@
       to { transform: translateX(-50%) scale(1.08); }
     }
 
+    /* 9. Page 6: Animated Hand & Proposal Page */
+    #proposalPage {
+      position: fixed;
+      inset: 0;
+      z-index: 85;
+      background: radial-gradient(circle at center, #381228 0%, #120516 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      overflow: hidden;
+    }
+
+    #proposalPage.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .proposal-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 180, 200, 0.3);
+      padding: 30px 20px;
+      border-radius: 30px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease 1s;
+    }
+
+    #proposalPage.animate .proposal-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .proposal-card h2 {
+      font-size: 24px;
+      color: #ff9ebb;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .proposal-btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .proposal-btn-group button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .btn-prop-yes {
+      background: linear-gradient(135deg, #2ed573, #1e90ff);
+      color: white;
+      box-shadow: 0 8px 20px rgba(46, 213, 115, 0.4);
+    }
+
+    .btn-prop-no {
+      background: linear-gradient(135deg, #ff4757, #ff6b81);
+      color: white;
+      box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4);
+    }
+
+    /* Hands and Rose Animation Elements */
+    .prop-hand {
+      position: absolute;
+      top: 38%;
+      font-size: 70px;
+      transition: transform 1.2s ease-out;
+      z-index: 5;
+    }
+
+    .prop-hand-left {
+      left: -80px;
+    }
+
+    .prop-hand-right {
+      right: -80px;
+    }
+
+    #proposalPage.animate .prop-hand-left {
+      transform: translateX(110px);
+    }
+
+    #proposalPage.animate .prop-hand-right {
+      transform: translateX(-110px);
+    }
+
+    .prop-rose {
+      position: absolute;
+      top: 36%;
+      font-size: 80px;
+      opacity: 0;
+      transform: scale(0.2);
+      transition: all 1.2s ease-out;
+      z-index: 6;
+    }
+
+    #proposalPage.animate .prop-rose {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Final Screen Overlay */
+    #finalPsychoOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: rgba(18, 5, 22, 0.95);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #finalPsychoOverlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #finalPsychoOverlay h2 {
+      color: #ff4757;
+      font-size: 24px;
+      line-height: 1.5;
+      text-shadow: 0 4px 15px rgba(255, 71, 87, 0.5);
+    }
+
     /* Floating Emoji Animation */
     .floating-emoji {
       position: fixed;
@@ -1103,7 +1255,7 @@
       <p>Enter the secret code to unlock our playlist!</p>
 
       <div class="code-input-container">
-        <input type="password" id="passcodeInput" class="code-input" placeholder="••••••" maxlength="6">
+        <input type="password" id="passcodeInput" class="code-input" placeholder="••••••••" maxlength="6">
         <p class="permanent-hint">💡 Hint: The code consists of 6 numbers.</p>
         <button class="unlock-btn" onclick="checkPasscode()">Unlock Album ♡</button>
       </div>
@@ -1299,7 +1451,7 @@
           Altamash ♡
         </div>
 
-        <!-- NEW FINISHED READING BUTTON -->
+        <!-- FINISHED READING BUTTON -->
         <button class="finished-reading-btn" onclick="openGamePage()">Finished Reading 💌 ➔</button>
       </div>
     </div>
@@ -1325,6 +1477,38 @@
     </div>
 
     <button id="roundResetBtn" onclick="nextGameRound()">Play Next Round 🔄</button>
+    
+    <!-- NEXT TO PROPOSAL PAGE BUTTON -->
+    <button class="next-page-btn btn-top-accent" style="position: absolute; bottom: 15px; width: 85%; max-width: 360px; z-index: 40;" onclick="openProposalPage()">Go To Fourth Page 💖 ➔</button>
+  </div>
+
+  <!-- 9. Page 6: Proposal Page -->
+  <div id="proposalPage">
+    <div class="prop-hand prop-hand-left">🫲</div>
+    <div class="prop-rose">🌹</div>
+    <div class="prop-hand prop-hand-right">🫱</div>
+
+    <div class="proposal-card">
+      <h2>Will you want to be my forever? 💕</h2>
+      <div class="proposal-btn-group">
+        <button class="btn-prop-yes" onclick="handleProposalYes()">Yes!</button>
+        <button class="btn-prop-no" onclick="handleProposalNo()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for "Think Again" Popup -->
+  <div id="thinkAgainModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="color: #ff4757;">Think again! 🤔💭</h3>
+      <p>Are you really sure? Please think again!</p>
+      <button class="modal-btn" onclick="closeThinkAgainModal()">Okay, let me think!</button>
+    </div>
+  </div>
+
+  <!-- Final Psycho Acceptance Message Overlay -->
+  <div id="finalPsychoOverlay">
+    <h2>🎉 Yay! 🎉<br><br>Finally now you are tied with a psycho which will create unique things to make you happy. ❤️✨</h2>
   </div>
 
   <audio id="audio"></audio>
@@ -1337,6 +1521,72 @@
     const ALLOWED_NAME = "Ananya"; 
 
     let wrongAttempts = 0;
+
+    /* AUDIO SYNTHESIS ENGINE FOR CUTE BG MUSIC & POP SOUND */
+    let audioCtx = null;
+    let bgMusicInterval = null;
+
+    function initAudioEngine() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function startCuteBgMusic() {
+      initAudioEngine();
+      if (bgMusicInterval) return;
+
+      const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00];
+      let noteIndex = 0;
+
+      bgMusicInterval = setInterval(() => {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[noteIndex], audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+
+        noteIndex = (noteIndex + 1) % notes.length;
+      }, 380);
+    }
+
+    function stopCuteBgMusic() {
+      if (bgMusicInterval) {
+        clearInterval(bgMusicInterval);
+        bgMusicInterval = null;
+      }
+    }
+
+    function playPopSound() {
+      initAudioEngine();
+      if (!audioCtx) return;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.08);
+
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.08);
+    }
 
     const songs = [
       { title: "Our First Song", artist: "Our Playlist", file: "song1.mp3", cover: "cover1.jpg" },
@@ -1419,6 +1669,10 @@
     const heartTransition = document.getElementById("heartTransition");
     const letterPage = document.getElementById("letterPage");
     const gamePage = document.getElementById("gamePage");
+
+    const proposalPage = document.getElementById("proposalPage");
+    const thinkAgainModal = document.getElementById("thinkAgainModal");
+    const finalPsychoOverlay = document.getElementById("finalPsychoOverlay");
 
     const emojiList = ["💖", "✨", "🌸", "💕", "🎶", "🥰", "💌", "⭐", "🫀", "🎈"];
 
@@ -1616,12 +1870,43 @@
     function openGamePage() {
       letterPage.classList.remove("active");
       gamePage.classList.add("active");
+      startCuteBgMusic();
       initGame();
     }
 
     function closeGamePage() {
       gamePage.classList.remove("active");
+      stopCuteBgMusic();
       stopGameLoop();
+    }
+
+    /* PROPOSAL PAGE (PAGE 6) LOGIC */
+    function openProposalPage() {
+      closeGamePage();
+      proposalPage.classList.add("active");
+      setTimeout(() => {
+        proposalPage.classList.add("animate");
+      }, 100);
+    }
+
+    function handleProposalNo() {
+      thinkAgainModal.classList.add("active");
+    }
+
+    function closeThinkAgainModal() {
+      thinkAgainModal.classList.remove("active");
+    }
+
+    function handleProposalYes() {
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        finalPsychoOverlay.classList.add("active");
+      }, 800);
     }
 
     /* ======================================================
@@ -1902,6 +2187,7 @@
             arrow.active = false;
             poppedCount++;
 
+            playPopSound(); // Pop Sound Trigger
             createPopParticles(balloon.x, balloon.y, balloon.color);
             triggerEmojiBurst();
 
@@ -2003,51 +2289,6 @@
     }
 
     loadSong(0);
-    <!-- Background Music & Audio Elements -->
-<audio id="bg-music" src="assets/cute-bgm.mp3" loop></audio>
-<audio id="pop-sound" src="assets/pop-sound.mp3"></audio>
-
-<!-- Page 3: Balloon Game Container -->
-<div id="page-3" class="page">
-  <div id="game-container">
-    <!-- Balloon and Arrow Game Canvas / Elements Here -->
-  </div>
-  
-  <!-- Next Page Button -->
-  <button id="next-btn-p3" onclick="goToPage(4)">Next &rarr;</button>
-</div>
-
-<!-- Page 4: Proposal Page -->
-<div id="page-4" class="page hidden">
-  <div class="proposal-container">
-    <!-- Animated Hands holding Bouquet/Rose -->
-    <div class="hands-wrapper">
-      <div class="hand left-hand"></div>
-      <div class="hand right-hand"></div>
-      <img src="assets/bouquet.png" alt="Bouquet" class="bouquet-img">
-    </div>
-
-    <!-- Proposal Text -->
-    <h2 class="proposal-text">So after all this, will you be my forever?</h2>
-
-    <!-- Response Buttons -->
-    <div class="button-group">
-      <button class="btn yes-btn" onclick="handleYes()">Yes</button>
-      <button class="btn no-btn" onclick="handleNo()">No</button>
-    </div>
-  </div>
-</div>
-
-<!-- Custom Pop-up Modal -->
-<div id="custom-modal" class="modal hidden">
-  <div class="modal-content">
-    <p id="modal-text"></p>
-    <button onclick="closeModal()">OK</button>
-  </div>
-</div>
-
-<!-- Confetti Canvas for Big Popper Effect -->
-<canvas id="confetti-canvas"></canvas>
   </script>
 
 </body>
